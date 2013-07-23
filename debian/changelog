@@ -1,0 +1,5 @@
+lxc-docker (0.5.0-1) unstable; urgency=low
+ 
+  * Initial release (Closes: #706060)
+
+ -- Daniel Mizyrycki <daniel@dotcloud.com>  Tue, 23 Jul 2013 00:12:49 -0700

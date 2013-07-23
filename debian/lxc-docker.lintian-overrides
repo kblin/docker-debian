@@ -1,0 +1,3 @@
+lxc-docker: statically-linked-binary
+# There is no upstream changelog.
+lxc-docker: no-upstream-changelog
