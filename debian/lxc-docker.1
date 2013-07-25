@@ -1,4 +1,4 @@
-.TH "DOCKER" "1" "May 07, 2013" "0.1" "Docker"
+.TH "DOCKER" "1" "July 25, 2013" "0.1" "Docker"
 .SH NAME
 docker \- Docker Documentation
 .
@@ -28,43 +28,157 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.\" Man page generated from reStructeredText.
+.\" Man page generated from reStructuredText.
 .
 .sp
 This documentation has the following resources:
-.SH CONCEPTS
+.SH OVERVIEW
 .sp
 Contents:
-.SS Standard Containers
-.SS What is a Standard Container?
+.SS Welcome
+[image]
 .sp
-Docker defines a unit of software delivery called a Standard Container. The goal of a Standard Container is to encapsulate a software component and all its dependencies in
-a format that is self\-describing and portable, so that any compliant runtime can run it without extra dependency, regardless of the underlying machine and the contents of the container.
+\fBdocker\fP, the Linux Container Runtime, runs Unix processes with
+strong guarantees of isolation across servers. Your software runs
+repeatably everywhere because its \fIcontainer_def\fP includes any
+dependencies.
 .sp
-The spec for Standard Containers is currently work in progress, but it is very straightforward. It mostly defines 1) an image format, 2) a set of standard operations, and 3) an execution environment.
+\fBdocker\fP runs three ways:
+.INDENT 0.0
+.IP \(bu 2
+as a daemon to manage LXC containers on your \fILinux host\fP (\fBsudo docker \-d\fP)
+.IP \(bu 2
+as a \fICLI\fP which talks to the daemon\(aqs \fI\%REST API\fP (\fBdocker run ...\fP)
+.IP \(bu 2
+as a client of \fIRepositories\fP
+that let you share what you\(aqve built (\fBdocker pull, docker
+commit\fP).
+.UNINDENT
 .sp
-A great analogy for this is the shipping container. Just like Standard Containers are a fundamental unit of software delivery, shipping containers (\fI\%http://bricks.argz.com/ins/7823-1/12\fP) are a fundamental unit of physical delivery.
+Each use of \fBdocker\fP is documented here. The features of Docker are
+currently in active development, so this documention will change
+frequently.
+.sp
+For an overview of Docker, please see the \fI\%Introduction\fP. When you\(aqre ready to start working with
+Docker, we have a \fI\%quick start\fP
+and a more in\-depth guide to \fIubuntu_linux\fP and other
+\fIinstallation_list\fP paths including prebuilt binaries,
+Vagrant\-created VMs, Rackspace and Amazon instances.
+.sp
+Enough reading! \fITry it out!\fP
+\fI(This was our original Welcome page, but it is a bit forward\-looking
+for docs, and maybe not enough vision for a true manifesto. We\(aqll
+reveal more vision in the future to make it more Manifesto\-y.)\fP
+.SS Docker Manifesto
+.sp
+Docker complements LXC with a high\-level API which operates at the
+process level. It runs unix processes with strong guarantees of
+isolation and repeatability across servers.
+.sp
+Docker is a great building block for automating distributed systems:
+large\-scale web deployments, database clusters, continuous deployment
+systems, private PaaS, service\-oriented architectures, etc.
+.INDENT 0.0
+.IP \(bu 2
+\fBHeterogeneous payloads\fP Any combination of binaries, libraries,
+configuration files, scripts, virtualenvs, jars, gems, tarballs, you
+name it. No more juggling between domain\-specific tools. Docker can
+deploy and run them all.
+.IP \(bu 2
+\fBAny server\fP Docker can run on any x64 machine with a modern linux
+kernel \- whether it\(aqs a laptop, a bare metal server or a VM. This
+makes it perfect for multi\-cloud deployments.
+.IP \(bu 2
+\fBIsolation\fP docker isolates processes from each other and from the
+underlying host, using lightweight containers.
+.IP \(bu 2
+\fBRepeatability\fP Because containers are isolated in their own
+filesystem, they behave the same regardless of where, when, and
+alongside what they run.
+.UNINDENT
+\fI\%\fP.SS What is a Standard Container?
+.sp
+Docker defines a unit of software delivery called a Standard
+Container. The goal of a Standard Container is to encapsulate a
+software component and all its dependencies in a format that is
+self\-describing and portable, so that any compliant runtime can run it
+without extra dependency, regardless of the underlying machine and the
+contents of the container.
+.sp
+The spec for Standard Containers is currently work in progress, but it
+is very straightforward. It mostly defines 1) an image format, 2) a
+set of standard operations, and 3) an execution environment.
+.sp
+A great analogy for this is the shipping container. Just like Standard
+Containers are a fundamental unit of software delivery, shipping
+containers are a fundamental unit of physical delivery.
 .SS Standard operations
 .sp
-Just like shipping containers, Standard Containers define a set of STANDARD OPERATIONS. Shipping containers can be lifted, stacked, locked, loaded, unloaded and labelled. Similarly, standard containers can be started, stopped, copied, snapshotted, downloaded, uploaded and tagged.
+Just like shipping containers, Standard Containers define a set of
+STANDARD OPERATIONS. Shipping containers can be lifted, stacked,
+locked, loaded, unloaded and labelled. Similarly, standard containers
+can be started, stopped, copied, snapshotted, downloaded, uploaded and
+tagged.
 .SS Content\-agnostic
 .sp
-Just like shipping containers, Standard Containers are CONTENT\-AGNOSTIC: all standard operations have the same effect regardless of the contents. A shipping container will be stacked in exactly the same way whether it contains Vietnamese powder coffee or spare Maserati parts. Similarly, Standard Containers are started or uploaded in the same way whether they contain a postgres database, a php application with its dependencies and application server, or Java build artifacts.
+Just like shipping containers, Standard Containers are
+CONTENT\-AGNOSTIC: all standard operations have the same effect
+regardless of the contents. A shipping container will be stacked in
+exactly the same way whether it contains Vietnamese powder coffee or
+spare Maserati parts. Similarly, Standard Containers are started or
+uploaded in the same way whether they contain a postgres database, a
+php application with its dependencies and application server, or Java
+build artifacts.
 .SS Infrastructure\-agnostic
 .sp
-Both types of containers are INFRASTRUCTURE\-AGNOSTIC: they can be transported to thousands of facilities around the world, and manipulated by a wide variety of equipment. A shipping container can be packed in a factory in Ukraine, transported by truck to the nearest routing center, stacked onto a train, loaded into a German boat by an Australian\-built crane, stored in a warehouse at a US facility, etc. Similarly, a standard container can be bundled on my laptop, uploaded to S3, downloaded, run and snapshotted by a build server at Equinix in Virginia, uploaded to 10 staging servers in a home\-made Openstack cluster, then sent to 30 production instances across 3 EC2 regions.
+Both types of containers are INFRASTRUCTURE\-AGNOSTIC: they can be
+transported to thousands of facilities around the world, and
+manipulated by a wide variety of equipment. A shipping container can
+be packed in a factory in Ukraine, transported by truck to the nearest
+routing center, stacked onto a train, loaded into a German boat by an
+Australian\-built crane, stored in a warehouse at a US facility,
+etc. Similarly, a standard container can be bundled on my laptop,
+uploaded to S3, downloaded, run and snapshotted by a build server at
+Equinix in Virginia, uploaded to 10 staging servers in a home\-made
+Openstack cluster, then sent to 30 production instances across 3 EC2
+regions.
 .SS Designed for automation
 .sp
-Because they offer the same standard operations regardless of content and infrastructure, Standard Containers, just like their physical counterpart, are extremely well\-suited for automation. In fact, you could say automation is their secret weapon.
+Because they offer the same standard operations regardless of content
+and infrastructure, Standard Containers, just like their physical
+counterpart, are extremely well\-suited for automation. In fact, you
+could say automation is their secret weapon.
 .sp
-Many things that once required time\-consuming and error\-prone human effort can now be programmed. Before shipping containers, a bag of powder coffee was hauled, dragged, dropped, rolled and stacked by 10 different people in 10 different locations by the time it reached its destination. 1 out of 50 disappeared. 1 out of 20 was damaged. The process was slow, inefficient and cost a fortune \- and was entirely different depending on the facility and the type of goods.
+Many things that once required time\-consuming and error\-prone human
+effort can now be programmed. Before shipping containers, a bag of
+powder coffee was hauled, dragged, dropped, rolled and stacked by 10
+different people in 10 different locations by the time it reached its
+destination. 1 out of 50 disappeared. 1 out of 20 was damaged. The
+process was slow, inefficient and cost a fortune \- and was entirely
+different depending on the facility and the type of goods.
 .sp
-Similarly, before Standard Containers, by the time a software component ran in production, it had been individually built, configured, bundled, documented, patched, vendored, templated, tweaked and instrumented by 10 different people on 10 different computers. Builds failed, libraries conflicted, mirrors crashed, post\-it notes were lost, logs were misplaced, cluster updates were half\-broken. The process was slow, inefficient and cost a fortune \- and was entirely different depending on the language and infrastructure provider.
+Similarly, before Standard Containers, by the time a software
+component ran in production, it had been individually built,
+configured, bundled, documented, patched, vendored, templated, tweaked
+and instrumented by 10 different people on 10 different
+computers. Builds failed, libraries conflicted, mirrors crashed,
+post\-it notes were lost, logs were misplaced, cluster updates were
+half\-broken. The process was slow, inefficient and cost a fortune \-
+and was entirely different depending on the language and
+infrastructure provider.
 .SS Industrial\-grade delivery
 .sp
-There are 17 million shipping containers in existence, packed with every physical good imaginable. Every single one of them can be loaded on the same boats, by the same cranes, in the same facilities, and sent anywhere in the World with incredible efficiency. It is embarrassing to think that a 30 ton shipment of coffee can safely travel half\-way across the World in \fIless time\fP than it takes a software team to deliver its code from one datacenter to another sitting 10 miles away.
+There are 17 million shipping containers in existence, packed with
+every physical good imaginable. Every single one of them can be loaded
+on the same boats, by the same cranes, in the same facilities, and
+sent anywhere in the World with incredible efficiency. It is
+embarrassing to think that a 30 ton shipment of coffee can safely
+travel half\-way across the World in \fIless time\fP than it takes a
+software team to deliver its code from one datacenter to another
+sitting 10 miles away.
 .sp
-With Standard Containers we can put an end to that embarrassment, by making INDUSTRIAL\-GRADE DELIVERY of software a reality.
+With Standard Containers we can put an end to that embarrassment, by
+making INDUSTRIAL\-GRADE DELIVERY of software a reality.
 .SS Standard Container Specification
 .sp
 (TODO)
@@ -86,6 +200,7 @@ Attach standard streams
 .IP \(bu 2
 List filesystem changes
 .IP \(bu 2
+...
 .UNINDENT
 .SS Execution environment
 .SS Root filesystem
@@ -101,6 +216,11 @@ List filesystem changes
 .SS Security
 .SH INSTALLATION
 .sp
+There are a number of ways to install Docker, depending on where you
+want to run the daemon. The \fIubuntu_linux\fP installation is the
+officially\-tested version, and the community adds more techniques for
+installing Docker all the time.
+.sp
 Contents:
 .SS Ubuntu Linux
 .INDENT 0.0
@@ -109,61 +229,240 @@ Contents:
 .UNINDENT
 .UNINDENT
 .sp
-Installing on Ubuntu 12.04 and 12.10
+Right now, the officially supported distribution are:
+.INDENT 0.0
+.IP \(bu 2
+\fIubuntu_precise\fP
+.IP \(bu 2
+\fIubuntu_raring\fP
+.UNINDENT
 .sp
-Right now, the officially supported distributions are:
+Docker has the following dependencies
+.INDENT 0.0
+.IP \(bu 2
+Linux kernel 3.8 (read more about \fIkernel\fP)
+.IP \(bu 2
+AUFS file system support (we are working on BTRFS support as an alternative)
+.UNINDENT
+.SS Ubuntu Precise 12.04 (LTS) (64\-bit)
 .sp
-Ubuntu 12.04 (precise LTS)
-Ubuntu 12.10 (quantal)
-Docker probably works on other distributions featuring a recent kernel, the AUFS patch, and up\-to\-date lxc. However this has not been tested.
-.SS Install dependencies:
+This installation path should work at all times.
+.SS Dependencies
+.sp
+\fBLinux kernel 3.8\fP
+.sp
+Due to a bug in LXC docker works best on the 3.8 kernel. Precise comes with a 3.2 kernel, so we need to upgrade it. The kernel we install comes with AUFS built in.
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-sudo apt\-get install lxc wget bsdtar curl
+# install the backported kernel
+sudo apt\-get update && sudo apt\-get install linux\-image\-generic\-lts\-raring
+
+# reboot
+sudo reboot
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Installation
+.sp
+Docker is available as a Ubuntu PPA (Personal Package Archive),
+\fI\%hosted on launchpad\fP
+which makes installing Docker on Ubuntu very easy.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Add the PPA sources to your apt sources list.
+sudo apt\-get install python\-software\-properties && sudo add\-apt\-repository ppa:dotcloud/lxc\-docker
+
+# Update your sources
+sudo apt\-get update
+
+# Install, you will see another warning that the package cannot be authenticated. Confirm install.
+sudo apt\-get install lxc\-docker
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Verify it worked
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# download the base \(aqubuntu\(aq container and run bash inside it while setting up an interactive shell
+docker run \-i \-t ubuntu /bin/bash
+
+# type \(aqexit\(aq to exit
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+\fBDone!\fP, now continue with the \fIhello_world\fP example.
+.SS Ubuntu Raring 13.04 (64 bit)
+.SS Dependencies
+.sp
+\fBAUFS filesystem support\fP
+.sp
+Ubuntu Raring already comes with the 3.8 kernel, so we don\(aqt need to install it. However, not all systems
+have AUFS filesystem support enabled, so we need to install it.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+sudo apt\-get update
 sudo apt\-get install linux\-image\-extra\-\(gauname \-r\(ga
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
-The linux\-image\-extra package is needed on standard Ubuntu EC2 AMIs in order to install the aufs kernel module.
+\fBadd\-apt\-repository support\fP
 .sp
-Install the latest docker binary:
-.sp
-.nf
-.ft C
-wget http://get.docker.io/builds/$(uname \-s)/$(uname \-m)/docker\-master.tgz
-tar \-xf docker\-master.tgz
-.ft P
-.fi
-.sp
-Run your first container!
-.sp
-.nf
-.ft C
-cd docker\-master
-.ft P
-.fi
-.sp
-.nf
-.ft C
-sudo ./docker run \-i \-t base /bin/bash
-.ft P
-.fi
-.sp
-Consider adding docker to your PATH for simplicity.
-.sp
-Continue with the \fIhello_world\fP example.
-.SS Mac OS X and other linux
+Some installations of Ubuntu 13.04 require \fBsoftware\-properties\-common\fP to be
+installed before being able to use add\-apt\-repository.
 .INDENT 0.0
 .INDENT 3.5
-Please note this is a community contributed installation path. The only \(aqofficial\(aq installation is using the \fIubuntu_linux\fP installation path. This version
-may be out of date because it depends on some binaries to be updated and published
-.UNINDENT
-.UNINDENT
-.SS Requirements
 .sp
-We currently rely on some Ubuntu\-linux specific packages, this will change in the future, but for now we provide a
-streamlined path to install Virtualbox with a Ubuntu 12.10 image using Vagrant.
+.nf
+.ft C
+sudo apt\-get install software\-properties\-common
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Installation
+.sp
+Docker is available as a Ubuntu PPA (Personal Package Archive),
+\fI\%hosted on launchpad\fP
+which makes installing Docker on Ubuntu very easy.
+.sp
+Add the custom package sources to your apt sources list.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# add the sources to your apt
+sudo add\-apt\-repository ppa:dotcloud/lxc\-docker
+
+# update
+sudo apt\-get update
+
+# install
+sudo apt\-get install lxc\-docker
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Verify it worked
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# download the base \(aqubuntu\(aq container and run bash inside it while setting up an interactive shell
+docker run \-i \-t ubuntu /bin/bash
+
+# type exit to exit
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+\fBDone!\fP, now continue with the \fIhello_world\fP example.
+.SS Binaries
+.INDENT 0.0
+.INDENT 3.5
+\fBPlease note this project is currently under heavy development. It should not be used in production.\fP
+.UNINDENT
+.UNINDENT
+.sp
+\fBThis instruction set is meant for hackers who want to try out Docker on a variety of environments.\fP
+.sp
+Right now, the officially supported distributions are:
+.INDENT 0.0
+.IP \(bu 2
+\fIubuntu_precise\fP
+.IP \(bu 2
+\fIubuntu_raring\fP
+.UNINDENT
+.sp
+But we know people have had success running it under
+.INDENT 0.0
+.IP \(bu 2
+Debian
+.IP \(bu 2
+Suse
+.IP \(bu 2
+\fIarch_linux\fP
+.UNINDENT
+.SS Dependencies:
+.INDENT 0.0
+.IP \(bu 2
+3.8 Kernel (read more about \fIkernel\fP)
+.IP \(bu 2
+AUFS filesystem support
+.IP \(bu 2
+lxc
+.IP \(bu 2
+xz\-utils
+.UNINDENT
+.SS Get the docker binary:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+wget http://get.docker.io/builds/Linux/x86_64/docker\-latest.tgz
+tar \-xf docker\-latest.tgz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Run the docker daemon
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# start the docker in daemon mode from the directory you unpacked
+sudo ./docker \-d &
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Run your first container!
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# check your docker version
+\&./docker version
+
+# run a container and open an interactive shell in the container
+\&./docker run \-i \-t ubuntu /bin/bash
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Continue with the \fIhello_world\fP example.
+.SS Using Vagrant (Mac, Linux)
+.sp
+This guide will setup a new virtualbox virtual machine with docker installed on your computer. This works on most operating
+systems, including MacOX, Windows, Linux, FreeBSD and others. If you can install these and have at least 400Mb RAM
+to spare you should be good.
+.SS Install Vagrant and Virtualbox
 .INDENT 0.0
 .IP 1. 3
 Install virtualbox from \fI\%https://www.virtualbox.org/\fP (or use your package manager)
@@ -173,73 +472,79 @@ Install vagrant from \fI\%http://www.vagrantup.com/\fP (or use your package mana
 Install git if you had not installed it before, check if it is installed by running
 \fBgit\fP in a terminal window
 .UNINDENT
-.sp
-We recommend having at least about 2Gb of free disk space and 2Gb RAM (or more).
-.SS Installation
+.SS Spin it up
 .INDENT 0.0
 .IP 1. 3
-Fetch the docker sources
-.UNINDENT
+Fetch the docker sources (this includes the Vagrantfile for machine setup).
+.INDENT 3.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 git clone https://github.com/dotcloud/docker.git
 .ft P
 .fi
-.INDENT 0.0
+.UNINDENT
+.UNINDENT
 .IP 2. 3
 Run vagrant from the sources directory
-.UNINDENT
+.INDENT 3.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 vagrant up
 .ft P
 .fi
-.sp
-Vagrant will:
-.INDENT 0.0
-.IP \(bu 2
-Download the Quantal64 base ubuntu virtual machine image from get.docker.io/
-.IP \(bu 2
-Boot this image in virtualbox
+.UNINDENT
 .UNINDENT
 .sp
-Then it will use Puppet to perform an initial setup in this machine:
-.INDENT 0.0
+Vagrant will:
+.INDENT 3.0
 .IP \(bu 2
-Download & untar the most recent docker binary tarball to vagrant homedir.
+Download the \(aqofficial\(aq Precise64 base ubuntu virtual machine image from vagrantup.com
 .IP \(bu 2
-Debootstrap to /var/lib/docker/images/ubuntu.
+Boot this image in virtualbox
 .IP \(bu 2
-Install & run dockerd as service.
+Add the \fI\%Docker PPA sources\fP to /etc/apt/sources.lst
 .IP \(bu 2
-Put docker in /usr/local/bin.
+Update your sources
 .IP \(bu 2
-Put latest Go toolchain in /usr/local/go.
+Install lxc\-docker
 .UNINDENT
 .sp
 You now have a Ubuntu Virtual Machine running with docker pre\-installed.
+.UNINDENT
+.SS Connect
 .sp
 To access the VM and use Docker, Run \fBvagrant ssh\fP from the same directory as where you ran
-\fBvagrant up\fP. Vagrant will make sure to connect you to the correct VM.
+\fBvagrant up\fP. Vagrant will connect you to the correct VM.
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 vagrant ssh
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
+.SS Run
 .sp
 Now you are in the VM, run docker
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 docker
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 Continue with the \fIhello_world\fP example.
-.SS Windows
+.SS Using Vagrant (Windows)
 .INDENT 0.0
 .INDENT 3.5
 Please note this is a community contributed installation path. The only \(aqofficial\(aq installation is using the \fIubuntu_linux\fP installation path. This version
@@ -275,6 +580,8 @@ Alternatively, you can also use a Cygwin terminal, or Git Bash (or any other com
 .SS Launch an Ubuntu virtual server
 .sp
 Let’s download and run an Ubuntu image with docker binaries already installed.
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -283,6 +590,8 @@ cd docker
 vagrant up
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 [image: run docker]
 [image]
 .sp
@@ -299,31 +608,43 @@ Use SSH
 .SS Using Vagrant on Windows Command Prompt
 .sp
 Run the following command
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 vagrant ssh
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 You may see an error message starting with “\fIssh\fP executable not found”. In this case it means that you do not have SSH in your PATH. If you do not have SSH in your PATH you can set it up with the “set” command. For instance, if your ssh.exe is in the folder named “C:Program Files (x86)Gitbin”, then you can run the following command:
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 set PATH=%PATH%;C:\eProgram Files (x86)\eGit\ebin
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 [image: run docker]
 [image]
 .SS Using SSH
 .sp
 First step is to get the IP and port of your Ubuntu server. Simply run:
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 vagrant ssh\-config
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 You should see an output with HostName and Port information. In this example, HostName is 127.0.0.1 and port is 2222. And the User is “vagrant”. The password is not shown, but it is also “vagrant”.
 [image: run docker]
@@ -349,12 +670,16 @@ Open, and enter user = vagrant and password = vagrant.
 .SS SSH from a terminal
 .sp
 You can also run this command on your favorite terminal (windows prompt, cygwin, git\-bash, …). Make sure to adapt the IP and port from what you got from the vagrant ssh\-config command.
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 ssh vagrant@127.0.0.1 –p 2222
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 Enter user = vagrant and password = vagrant.
 [image: run docker]
@@ -364,20 +689,28 @@ Congratulations, you are now logged onto your Ubuntu Server, running on top of y
 .SS Running Docker
 .sp
 First you have to be root in order to run docker. Simply run the following command:
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 sudo su
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 You are now ready for the docker’s “hello world” example. Run
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-docker run \-a busybox echo hello world
+docker run busybox echo hello world
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 [image: run docker]
 [image]
 .sp
@@ -387,8 +720,8 @@ Now you can continue with the \fIhello_world\fP example.
 .SS Amazon EC2
 .INDENT 0.0
 .INDENT 3.5
-Please note this is a community contributed installation path. The only \(aqofficial\(aq installation is using the \fIubuntu_linux\fP installation path. This version
-may be out of date because it depends on some binaries to be updated and published
+Please note this is a community contributed installation path. The only \(aqofficial\(aq installation is using the
+\fIubuntu_linux\fP installation path. This version may sometimes be out of date.
 .UNINDENT
 .UNINDENT
 .SS Installation
@@ -399,20 +732,28 @@ Docker can now be installed on Amazon EC2 with a single vagrant command. Vagrant
 Install vagrant from \fI\%http://www.vagrantup.com/\fP (or use your package manager)
 .IP 2. 3
 Install the vagrant aws plugin
+.INDENT 3.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 vagrant plugin install vagrant\-aws
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .IP 3. 3
-Get the docker sources, this will give you the latest Vagrantfile and puppet manifests.
+Get the docker sources, this will give you the latest Vagrantfile.
+.INDENT 3.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 git clone https://github.com/dotcloud/docker.git
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .IP 4. 3
 Check your AWS environment.
 .sp
@@ -424,6 +765,8 @@ Inform Vagrant of your settings
 .sp
 Vagrant will read your access credentials from your environment, so we need to set them there first. Make sure
 you have everything on amazon aws setup so you can (manually) deploy a new image to EC2.
+.INDENT 3.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -433,6 +776,8 @@ export AWS_KEYPAIR_NAME=xxx
 export AWS_SSH_PRIVKEY=xxx
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 The environment variables are:
 .INDENT 3.0
@@ -447,37 +792,51 @@ The environment variables are:
 .UNINDENT
 .sp
 You can check if they are set correctly by doing something like
+.INDENT 3.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 echo $AWS_ACCESS_KEY_ID
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .IP 6. 3
 Do the magic!
+.INDENT 3.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 vagrant up \-\-provider=aws
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 If it stalls indefinitely on \fB[default] Waiting for SSH to become available...\fP, Double check your default security
 zone on AWS includes rights to SSH (port 22) to your container.
 .sp
-If you have an advanced AWS setup, you might want to have a look at the \fI\%https://github.com/mitchellh/vagrant-aws\fP
+If you have an advanced AWS setup, you might want to have a look at \fI\%https://github.com/mitchellh/vagrant-aws\fP
 .IP 7. 3
 Connect to your machine
+.INDENT 3.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 vagrant ssh
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .IP 8. 3
 Your first command
 .sp
 Now you are in the VM, run docker
+.INDENT 3.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -485,18 +844,1299 @@ docker
 .ft P
 .fi
 .UNINDENT
+.UNINDENT
+.UNINDENT
 .sp
 Continue with the \fIhello_world\fP example.
+.SS Rackspace Cloud
+.INDENT 0.0
+.INDENT 3.5
+Please note this is a community contributed installation path. The only \(aqofficial\(aq installation is using the
+\fIubuntu_linux\fP installation path. This version may sometimes be out of date.
+.UNINDENT
+.UNINDENT
+.sp
+Installing Docker on Ubuntu proviced by Rackspace is pretty straightforward, and you should mostly be able to follow the
+\fIubuntu_linux\fP installation guide.
+.sp
+\fBHowever, there is one caveat:\fP
+.sp
+If you are using any linux not already shipping with the 3.8 kernel you will need to install it. And this is a little
+more difficult on Rackspace.
+.sp
+Rackspace boots their servers using grub\(aqs menu.lst and does not like non \(aqvirtual\(aq packages (e.g. xen compatible)
+kernels there, although they do work. This makes \fBupdate\-grub\fP to not have the expected result, and you need to
+set the kernel manually.
+.sp
+\fBDo not attempt this on a production machine!\fP
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# update apt
+apt\-get update
+
+# install the new kernel
+apt\-get install linux\-generic\-lts\-raring
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Great, now you have kernel installed in /boot/, next is to make it boot next time.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# find the exact names
+find /boot/ \-name \(aq*3.8*\(aq
+
+# this should return some results
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Now you need to manually edit /boot/grub/menu.lst, you will find a section at the bottom with the existing options.
+Copy the top one and substitute the new kernel into that. Make sure the new kernel is on top, and double check kernel
+and initrd point to the right files.
+.sp
+Make special care to double check the kernel and initrd entries.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# now edit /boot/grub/menu.lst
+vi /boot/grub/menu.lst
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+It will probably look something like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+## ## End Default Options ##
+
+title              Ubuntu 12.04.2 LTS, kernel 3.8.x generic
+root               (hd0)
+kernel             /boot/vmlinuz\-3.8.0\-19\-generic root=/dev/xvda1 ro quiet splash console=hvc0
+initrd             /boot/initrd.img\-3.8.0\-19\-generic
+
+title              Ubuntu 12.04.2 LTS, kernel 3.2.0\-38\-virtual
+root               (hd0)
+kernel             /boot/vmlinuz\-3.2.0\-38\-virtual root=/dev/xvda1 ro quiet splash console=hvc0
+initrd             /boot/initrd.img\-3.2.0\-38\-virtual
+
+title              Ubuntu 12.04.2 LTS, kernel 3.2.0\-38\-virtual (recovery mode)
+root               (hd0)
+kernel             /boot/vmlinuz\-3.2.0\-38\-virtual root=/dev/xvda1 ro quiet splash  single
+initrd             /boot/initrd.img\-3.2.0\-38\-virtual
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Reboot server (either via command line or console)
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# reboot
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Verify the kernel was updated
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+uname \-a
+# Linux docker\-12\-04 3.8.0\-19\-generic #30~precise1\-Ubuntu SMP Wed May 1 22:26:36 UTC 2013 x86_64 x86_64 x86_64 GNU/Linux
+
+# nice! 3.8.
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Now you can finish with the \fIubuntu_linux\fP instructions.
+.SS Arch Linux
+.INDENT 0.0
+.INDENT 3.5
+Please note this is a community contributed installation path. The only \(aqofficial\(aq installation is using the
+\fIubuntu_linux\fP installation path. This version may sometimes be out of date.
+.UNINDENT
+.UNINDENT
+.sp
+Installing on Arch Linux is not officially supported but can be handled via
+either of the following AUR packages:
+.INDENT 0.0
+.IP \(bu 2
+\fI\%lxc-docker\fP
+.IP \(bu 2
+\fI\%lxc-docker-git\fP
+.UNINDENT
+.sp
+The lxc\-docker package will install the latest tagged version of docker.
+The lxc\-docker\-git package will build from the current master branch.
+.SS Dependencies
+.sp
+Docker depends on several packages which are specified as dependencies in
+either AUR package.
+.INDENT 0.0
+.IP \(bu 2
+aufs3
+.IP \(bu 2
+bridge\-utils
+.IP \(bu 2
+go
+.IP \(bu 2
+iproute2
+.IP \(bu 2
+linux\-aufs_friendly
+.IP \(bu 2
+lxc
+.UNINDENT
+.SS Installation
+.sp
+The instructions here assume \fByaourt\fP is installed.  See
+\fI\%Arch User Repository\fP
+for information on building and installing packages from the AUR if you have not
+done so before.
+.sp
+Keep in mind that if \fBlinux\-aufs_friendly\fP is not already installed that a
+new kernel will be compiled and this can take quite a while.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+yaourt \-S lxc\-docker\-git
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Starting Docker
+.sp
+Prior to starting docker modify your bootloader to use the
+\fBlinux\-aufs_friendly\fP kernel and reboot your system.
+.sp
+There is a systemd service unit created for docker.  To start the docker service:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+sudo systemctl start docker
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+To start on system boot:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+sudo systemctl enable docker
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Network Configuration
+.sp
+IPv4 packet forwarding is disabled by default on Arch, so internet access from inside
+the container may not work.
+.sp
+To enable the forwarding, run as root on the host system:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+sysctl net.ipv4.ip_forward=1
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+And, to make it persistent across reboots, enable it on the host\(aqs \fB/etc/sysctl.conf\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+net.ipv4.ip_forward=1
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Upgrading
+.sp
+\fBThese instructions are for upgrading Docker\fP
+.SS After normal installation
+.sp
+If you installed Docker normally using apt\-get or used Vagrant, use apt\-get to upgrade.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# update your sources list
+sudo apt\-get update
+
+# install the latest
+sudo apt\-get install lxc\-docker
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS After manual installation
+.sp
+If you installed the Docker binary
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# kill the running docker daemon
+killall docker
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# get the latest binary
+wget http://get.docker.io/builds/Linux/x86_64/docker\-latest.tgz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Unpack it to your current dir
+tar \-xf docker\-latest.tgz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Start docker in daemon mode (\-d) and disconnect (&) starting ./docker will start the version in your current dir rather than a version which
+might reside in your path.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# start the new version
+sudo ./docker \-d &
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Alternatively you can replace the docker binary in \fB/usr/local/bin\fP
+.SS Kernel Requirements
+.sp
+In short, Docker has the following kernel requirements:
+.INDENT 0.0
+.IP \(bu 2
+Linux version 3.8 or above.
+.IP \(bu 2
+\fI\%AUFS support\fP.
+.IP \(bu 2
+Cgroups and namespaces must be enabled.
+.sp
+The officially supported kernel is the one recommended by the
+\fIubuntu_linux\fP installation path. It is the one that most developers
+will use, and the one that receives the most attention from the core
+contributors. If you decide to go with a different kernel and hit a bug,
+please try to reproduce it with the official kernels first.
+.UNINDENT
+.sp
+If you cannot or do not want to use the "official" kernels,
+here is some technical background about the features (both optional and
+mandatory) that docker needs to run successfully.
+.SS Linux version 3.8 or above
+.sp
+Kernel versions 3.2 to 3.5 are not stable when used with docker.
+In some circumstances, you will experience kernel "oopses", or even crashes.
+The symptoms include:
+.INDENT 0.0
+.IP \(bu 2
+a container being killed in the middle of an operation (e.g. an \fBapt\-get\fP
+command doesn\(aqt complete);
+.IP \(bu 2
+kernel messages including mentioning calls to \fBmntput\fP or
+\fBd_hash_and_lookup\fP;
+.IP \(bu 2
+kernel crash causing the machine to freeze for a few minutes, or even
+completely.
+.UNINDENT
+.sp
+While it is still possible to use older kernels for development, it is
+really not advised to do so.
+.sp
+Docker checks the kernel version when it starts, and emits a warning if it
+detects something older than 3.8.
+.sp
+See issue \fI\%#407\fP for details.
+.SS AUFS support
+.sp
+Docker currently relies on AUFS, an unioning filesystem.
+While AUFS is included in the kernels built by the Debian and Ubuntu
+distributions, is not part of the standard kernel. This means that if
+you decide to roll your own kernel, you will have to patch your
+kernel tree to add AUFS. The process is documented on
+\fI\%AUFS webpage\fP.
+.SS Cgroups and namespaces
+.sp
+You need to enable namespaces and cgroups, to the extend of what is needed
+to run LXC containers. Technically, while namespaces have been introduced
+in the early 2.6 kernels, we do not advise to try any kernel before 2.6.32
+to run LXC containers. Note that 2.6.32 has some documented issues regarding
+network namespace setup and teardown; those issues are not a risk if you
+run containers in a private environment, but can lead to denial\-of\-service
+attacks if you want to run untrusted code in your containers. For more details,
+see \fI\%[LP#720095\fP.
+.sp
+Kernels 2.6.38, and every version since 3.2, have been deployed successfully
+to run containerized production workloads. Feature\-wise, there is no huge
+improvement between 2.6.38 and up to 3.6 (as far as docker is concerned!).
+.SS Extra Cgroup Controllers
+.sp
+Most control groups can be enabled or disabled individually. For instance,
+you can decide that you do not want to compile support for the CPU or memory
+controller. In some cases, the feature can be enabled or disabled at boot
+time. It is worth mentioning that some distributions (like Debian) disable
+"expensive" features, like the memory controller, because they can have
+a significant performance impact.
+.sp
+In the specific case of the memory cgroup, docker will detect if the cgroup
+is available or not. If it\(aqs not, it will print a warning, and it won\(aqt
+use the feature. If you want to enable that feature \-\- read on!
+.SS Memory and Swap Accounting on Debian/Ubuntu
+.sp
+If you use Debian or Ubuntu kernels, and want to enable memory and swap
+accounting, you must add the following command\-line parameters to your kernel:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+cgroup_enable=memory swapaccount=1
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+On Debian or Ubuntu systems, if you use the default GRUB bootloader, you can
+add those parameters by editing \fB/etc/default/grub\fP and extending
+\fBGRUB_CMDLINE_LINUX\fP. Look for the following line:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GRUB_CMDLINE_LINUX=""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+And replace it by the following one:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Then run \fBupdate\-grub\fP, and reboot.
+.SH USE
+.sp
+Contents:
+.SS The Basics
+.SS Starting Docker
+.sp
+If you have used one of the quick install paths\(aq, Docker may have been installed with upstart, Ubuntu\(aqs
+system for starting processes at boot time. You should be able to run \fBdocker help\fP and get output.
+.sp
+If you get \fBdocker: command not found\fP or something like \fB/var/lib/docker/repositories: permission denied\fP
+you will need to specify the path to it and manually start it.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Run docker in daemon mode
+sudo <path to>/docker \-d &
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Running an interactive shell
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Download a base image
+docker pull base
+
+# Run an interactive shell in the base image,
+# allocate a tty, attach stdin and stdout
+docker run \-i \-t base /bin/bash
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Bind Docker to another host/port or a unix socket
+.sp
+With \-H it is possible to make the Docker daemon to listen on a specific ip and port. By default, it will listen on 127.0.0.1:4243 to allow only local connections but you can set it to 0.0.0.0:4243 or a specific host ip to give access to everybody.
+.sp
+Similarly, the Docker client can use \-H to connect to a custom port.
+.sp
+\-H accepts host and port assignment in the following format: \fI\%tcp://[host][:port\fP] or unix://path
+For example:
+.INDENT 0.0
+.IP \(bu 2
+\fI\%tcp://host\fP \-> tcp connection on host:4243
+.IP \(bu 2
+\fI\%tcp://host:port\fP \-> tcp connection on host:port
+.IP \(bu 2
+\fI\%tcp://:port\fP \-> tcp connection on 127.0.0.1:port
+.IP \(bu 2
+unix://path/to/socket \-> unix socket located at path/to/socket
+.UNINDENT
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Run docker in daemon mode
+sudo <path to>/docker \-H 0.0.0.0:5555 &
+# Download a base image
+docker \-H :5555 pull base
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+You can use multiple \-H, for example, if you want to listen
+on both tcp and a unix socket
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Run docker in daemon mode
+sudo <path to>/docker \-H tcp://127.0.0.1:4243 \-H unix:///var/run/docker.sock
+# Download a base image
+docker pull base
+# OR
+docker \-H unix:///var/run/docker.sock pull base
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Starting a long\-running worker process
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Start a very useful long\-running process
+JOB=$(docker run \-d base /bin/sh \-c "while true; do echo Hello world; sleep 1; done")
+
+# Collect the output of the job so far
+docker logs $JOB
+
+# Kill the job
+docker kill $JOB
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Listing all running containers
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker ps
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Expose a service on a TCP port
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Expose port 4444 of this container, and tell netcat to listen on it
+JOB=$(docker run \-d \-p 4444 base /bin/nc \-l \-p 4444)
+
+# Which public port is NATed to my container?
+PORT=$(docker port $JOB 4444)
+
+# Connect to the public port via the host\(aqs public address
+# Please note that because of how routing works connecting to localhost or 127.0.0.1 $PORT will not work.
+# Replace *eth0* according to your local interface name.
+IP=$(ip \-o \-4 addr list eth0 | perl \-n \-e \(aqif (m{inet\es([\ed\e.]+)\e/\ed+\es}xms) { print $1 }\(aq)
+echo hello world | nc $IP $PORT
+
+# Verify that the network connection worked
+echo "Daemon received: $(docker logs $JOB)"
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Committing (saving) a container state
+.sp
+Save your containers state to a container image, so the state can be re\-used.
+.sp
+When you commit your container only the differences between the image the container was created from
+and the current state of the container will be stored (as a diff). See which images you already have
+using \fBdocker images\fP
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Commit your container to a new named image
+docker commit <container_id> <some_name>
+
+# List your containers
+docker images
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+You now have a image state from which you can create new instances.
+.sp
+Read more about \fIworking_with_the_repository\fP or continue to the complete \fIcli\fP
+.SS Working with Repositories
+.sp
+A \fIrepository\fP is a hosted collection of tagged \fIimages\fP that together create the file system for a container. The
+repository\(aqs name is a tag that indicates the provenance of the
+repository, i.e. who created it and where the original copy is
+located.
+.sp
+You can find one or more repositories hosted on a \fIregistry\fP. There
+can be an implicit or explicit host name as part of the repository
+tag. The implicit registry is located at \fBindex.docker.io\fP, the home
+of "top\-level" repositories and the Central Index. This registry may
+also include public "user" repositories.
+.sp
+So Docker is not only a tool for creating and managing your own
+\fIcontainers\fP \-\- \fBDocker is also a tool for
+sharing\fP. The Docker project provides a Central Registry to host
+public repositories, namespaced by user, and a Central Index which
+provides user authentication and search over all the public
+repositories. You can host your own Registry too! Docker acts as a
+client for these services via \fBdocker search, pull, login\fP and
+\fBpush\fP.
+.SS Top\-level, User, and Your Own Repositories
+.sp
+There are two types of public repositories: \fItop\-level\fP repositories
+which are controlled by the Docker team, and \fIuser\fP repositories
+created by individual contributors.
+.INDENT 0.0
+.IP \(bu 2
+Top\-level repositories can easily be recognized by \fBnot\fP having a
+\fB/\fP (slash) in their name. These repositories can generally be
+trusted.
+.IP \(bu 2
+User repositories always come in the form of
+\fB<username>/<repo_name>\fP. This is what your published images will
+look like if you push to the public Central Registry.
+.IP \(bu 2
+Only the authenticated user can push to their \fIusername\fP namespace
+on the Central Registry.
+.IP \(bu 2
+User images are not checked, it is therefore up to you whether or
+not you trust the creator of this image.
+.UNINDENT
+.sp
+Right now (version 0.5), private repositories are only possible by
+hosting \fI\%your own registry\fP.  To push or pull to a
+repository on your own registry, you must prefix the tag with the
+address of the registry\(aqs host, like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Tag to create a repository with the full registry location.
+# The location (e.g. localhost.localdomain:5000) becomes
+# a permanent part of the repository name
+docker tag 0u812deadbeef localhost.localdomain:5000/repo_name
+
+# Push the new repository to its home location on localhost
+docker push localhost.localdomain:5000/repo_name
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Once a repository has your registry\(aqs host name as part of the tag,
+you can push and pull it like any other repository, but it will
+\fBnot\fP be searchable (or indexed at all) in the Central Index, and
+there will be no user name checking performed. Your registry will
+function completely independently from the Central Index.
+.SS Find public images available on the Central Index
+.sp
+Seach by name, namespace or description
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker search <value>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Download them simply by their name
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker pull <value>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Very similarly you can search for and browse the index online on
+\fI\%https://index.docker.io\fP
+.SS Connecting to the Central Registry
+.sp
+You can create a user on the central Docker Index online, or by running
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker login
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This will prompt you for a username, which will become a public
+namespace for your public repositories.
+.sp
+If your username does not exist it will prompt you to also enter a
+password and your e\-mail address. It will then automatically log you
+in.
+.SS Committing a container to a named image
+.sp
+In order to commit to the repository it is required to have committed
+your container to an image within your username namespace.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# for example docker commit $CONTAINER_ID dhrp/kickassapp
+docker commit <container_id> <username>/<repo_name>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Pushing a container to its repository
+.sp
+In order to push an image to its repository you need to have committed
+your container to a named image (see above)
+.sp
+Now you can commit this image to the repository
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# for example docker push dhrp/kickassapp
+docker push <username>/<repo_name>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Port redirection
+.sp
+Docker can redirect public tcp ports to your container, so it can be reached over the network.
+Port redirection is done on \fBdocker run\fP using the \-p flag.
+.sp
+A port redirect is specified as PUBLIC:PRIVATE, where tcp port PUBLIC will be redirected to
+tcp port PRIVATE. As a special case, the public port can be omitted, in which case a random
+public port will be allocated.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# A random PUBLIC port is redirected to PRIVATE port 80 on the container
+docker run \-p 80 <image> <cmd>
+
+# PUBLIC port 80 is redirected to PRIVATE port 80
+docker run \-p 80:80 <image> <cmd>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Default port redirects can be built into a container with the EXPOSE build command.
+.SS Dockerfile Builder
+.sp
+\fBDocker can act as a builder\fP and read instructions from a text
+Dockerfile to automate the steps you would otherwise make manually to
+create an image. Executing \fBdocker build\fP will run your steps and
+commit them along the way, giving you a final image.
+.SS Table of Contents
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Dockerfile Builder\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%1. Usage\fP
+.IP \(bu 2
+\fI\%2. Format\fP
+.IP \(bu 2
+\fI\%3. Instructions\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%3.1 FROM\fP
+.IP \(bu 2
+\fI\%3.2 MAINTAINER\fP
+.IP \(bu 2
+\fI\%3.3 RUN\fP
+.IP \(bu 2
+\fI\%3.4 CMD\fP
+.IP \(bu 2
+\fI\%3.5 EXPOSE\fP
+.IP \(bu 2
+\fI\%3.6 ENV\fP
+.IP \(bu 2
+\fI\%3.7 ADD\fP
+.IP \(bu 2
+\fI\%3.8 ENTRYPOINT\fP
+.IP \(bu 2
+\fI\%3.9 VOLUME\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%4. Dockerfile Examples\fP
+.UNINDENT
+.UNINDENT
+.SS 1. Usage
+.sp
+To build an image from a source repository, create a description file
+called \fBDockerfile\fP at the root of your repository. This file will
+describe the steps to assemble the image.
+.sp
+Then call \fBdocker build\fP with the path of your source repository as
+argument:
+.INDENT 0.0
+.INDENT 3.5
+\fBdocker build .\fP
+.UNINDENT
+.UNINDENT
+.sp
+You can specify a repository and tag at which to save the new image if the
+build succeeds:
+.INDENT 0.0
+.INDENT 3.5
+\fBdocker build \-t shykes/myapp .\fP
+.UNINDENT
+.UNINDENT
+.sp
+Docker will run your steps one\-by\-one, committing the result if necessary,
+before finally outputting the ID of your new image.
+.SS 2. Format
+.sp
+The Dockerfile format is quite simple:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Comment
+INSTRUCTION arguments
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The Instruction is not case\-sensitive, however convention is for them to be
+UPPERCASE in order to distinguish them from arguments more easily.
+.sp
+Docker evaluates the instructions in a Dockerfile in order. \fBThe first
+instruction must be \(gaFROM\(ga\fP in order to specify the base image from
+which you are building.
+.sp
+Docker will ignore \fBcomment lines\fP \fIbeginning\fP with \fB#\fP. A comment
+marker anywhere in the rest of the line will be treated as an argument.
+.SS 3. Instructions
+.sp
+Here is the set of instructions you can use in a \fBDockerfile\fP for
+building images.
+.SS 3.1 FROM
+.INDENT 0.0
+.INDENT 3.5
+\fBFROM <image>\fP
+.UNINDENT
+.UNINDENT
+.sp
+The \fBFROM\fP instruction sets the \fIbase_image_def\fP for subsequent
+instructions. As such, a valid Dockerfile must have \fBFROM\fP as its
+first instruction.
+.sp
+\fBFROM\fP must be the first non\-comment instruction in the
+\fBDockerfile\fP.
+.sp
+\fBFROM\fP can appear multiple times within a single Dockerfile in order
+to create multiple images. Simply make a note of the last image id
+output by the commit before each new \fBFROM\fP command.
+.SS 3.2 MAINTAINER
+.INDENT 0.0
+.INDENT 3.5
+\fBMAINTAINER <name>\fP
+.UNINDENT
+.UNINDENT
+.sp
+The \fBMAINTAINER\fP instruction allows you to set the \fIAuthor\fP field of
+the generated images.
+.SS 3.3 RUN
+.INDENT 0.0
+.INDENT 3.5
+\fBRUN <command>\fP
+.UNINDENT
+.UNINDENT
+.sp
+The \fBRUN\fP instruction will execute any commands on the current image
+and commit the results. The resulting committed image will be used for
+the next step in the Dockerfile.
+.sp
+Layering \fBRUN\fP instructions and generating commits conforms to the
+core concepts of Docker where commits are cheap and containers can be
+created from any point in an image\(aqs history, much like source
+control.
+.SS 3.4 CMD
+.INDENT 0.0
+.INDENT 3.5
+\fBCMD <command>\fP
+.UNINDENT
+.UNINDENT
+.sp
+The \fBCMD\fP instruction sets the command to be executed when running
+the image.  This is functionally equivalent to running \fBdocker commit
+\-run \(aq{"Cmd": <command>}\(aq\fP outside the builder.
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+Don\(aqt confuse \fIRUN\fP with \fICMD\fP. \fIRUN\fP actually runs a
+command and commits the result; \fICMD\fP does not execute anything at
+build time, but specifies the intended command for the image.
+.UNINDENT
+.UNINDENT
+.SS 3.5 EXPOSE
+.INDENT 0.0
+.INDENT 3.5
+\fBEXPOSE <port> [<port>...]\fP
+.UNINDENT
+.UNINDENT
+.sp
+The \fBEXPOSE\fP instruction sets ports to be publicly exposed when
+running the image. This is functionally equivalent to running \fBdocker
+commit \-run \(aq{"PortSpecs": ["<port>", "<port2>"]}\(aq\fP outside the
+builder.
+.SS 3.6 ENV
+.INDENT 0.0
+.INDENT 3.5
+\fBENV <key> <value>\fP
+.UNINDENT
+.UNINDENT
+.sp
+The \fBENV\fP instruction sets the environment variable \fB<key>\fP to the
+value \fB<value>\fP. This value will be passed to all future \fBRUN\fP
+instructions. This is functionally equivalent to prefixing the command
+with \fB<key>=<value>\fP
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+The environment variables will persist when a container is run
+from the resulting image.
+.UNINDENT
+.UNINDENT
+.SS 3.7 ADD
+.INDENT 0.0
+.INDENT 3.5
+\fBADD <src> <dest>\fP
+.UNINDENT
+.UNINDENT
+.sp
+The \fBADD\fP instruction will copy new files from <src> and add them to
+the container\(aqs filesystem at path \fB<dest>\fP.
+.sp
+\fB<src>\fP must be the path to a file or directory relative to the
+source directory being built (also called the \fIcontext\fP of the build) or
+a remote file URL.
+.sp
+\fB<dest>\fP is the path at which the source will be copied in the
+destination container.
+.sp
+The copy obeys the following rules:
+.INDENT 0.0
+.IP \(bu 2
+If \fB<src>\fP is a directory, the entire directory is copied,
+including filesystem metadata.
+.IP \(bu 2
+If \fB<src>\(ga\fP is a tar archive in a recognized compression format
+(identity, gzip, bzip2 or xz), it is unpacked as a directory.
+.sp
+When a directory is copied or unpacked, it has the same behavior as
+\fBtar \-x\fP: the result is the union of
+.INDENT 2.0
+.IP 1. 3
+whatever existed at the destination path and
+.IP 2. 3
+the contents of the source tree,
+.UNINDENT
+.sp
+with conflicts resolved in favor of 2) on a file\-by\-file basis.
+.IP \(bu 2
+If \fB<src>\fP is any other kind of file, it is copied individually
+along with its metadata. In this case, if \fB<dst>\fP ends with a
+trailing slash \fB/\fP, it will be considered a directory and the
+contents of \fB<src>\fP will be written at \fB<dst>/base(<src>)\fP.
+.IP \(bu 2
+If \fB<dst>\fP does not end with a trailing slash, it will be
+considered a regular file and the contents of \fB<src>\fP will be
+written at \fB<dst>\fP.
+.IP \(bu 2
+If \fB<dest>\fP doesn\(aqt exist, it is created along with all missing
+directories in its path. All new files and directories are created
+with mode 0700, uid and gid 0.
+.UNINDENT
+.SS 3.8 ENTRYPOINT
+.INDENT 0.0
+.INDENT 3.5
+\fBENTRYPOINT /bin/echo\fP
+.UNINDENT
+.UNINDENT
+.sp
+The \fBENTRYPOINT\fP instruction adds an entry command that will not be
+overwritten when arguments are passed to docker run, unlike the
+behavior of \fBCMD\fP.  This allows arguments to be passed to the
+entrypoint.  i.e. \fBdocker run <image> \-d\fP will pass the "\-d" argument
+to the entrypoint.
+.SS 3.9 VOLUME
+.INDENT 0.0
+.INDENT 3.5
+\fBVOLUME ["/data"]\fP
+.UNINDENT
+.UNINDENT
+.sp
+The \fBVOLUME\fP instruction will add one or more new volumes to any
+container created from the image.
+.SS 4. Dockerfile Examples
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Nginx
+#
+# VERSION               0.0.1
+
+FROM      ubuntu
+MAINTAINER Guillaume J. Charmes "guillaume@dotcloud.com"
+
+# make sure the package repository is up to date
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+RUN apt\-get update
+
+RUN apt\-get install \-y inotify\-tools nginx apache2 openssh\-server
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Firefox over VNC
+#
+# VERSION               0.3
+
+FROM ubuntu
+# make sure the package repository is up to date
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+RUN apt\-get update
+
+# Install vnc, xvfb in order to create a \(aqfake\(aq display and firefox
+RUN apt\-get install \-y x11vnc xvfb firefox
+RUN mkdir /.vnc
+# Setup a password
+RUN x11vnc \-storepasswd 1234 ~/.vnc/passwd
+# Autostart firefox (might not be the best way, but it does the trick)
+RUN bash \-c \(aqecho "firefox" >> /.bashrc\(aq
+
+EXPOSE 5900
+CMD    ["x11vnc", "\-forever", "\-usepw", "\-create"]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Multiple images example
+#
+# VERSION               0.1
+
+FROM ubuntu
+RUN echo foo > bar
+# Will output something like ===> 907ad6c2736f
+
+FROM ubuntu
+RUN echo moo > oink
+# Will output something like ===> 695d7793cbe4
+
+# You\(aqll now have two images, 907ad6c2736f with /bar, and 695d7793cbe4 with
+# /oink.
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Using Puppet
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+Please note this is a community contributed installation path. The only \(aqofficial\(aq installation is using the
+\fIubuntu_linux\fP installation path. This version may sometimes be out of date.
+.UNINDENT
+.UNINDENT
+.SS Requirements
+.sp
+To use this guide you\(aqll need a working installation of Puppet from \fI\%Puppetlabs\fP .
+.sp
+The module also currently uses the official PPA so only works with Ubuntu.
+.SS Installation
+.sp
+The module is available on the \fI\%Puppet Forge\fP
+and can be installed using the built\-in module tool.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+puppet module install garethr/docker
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+It can also be found on \fI\%GitHub\fP
+if you would rather download the source.
+.SS Usage
+.sp
+The module provides a puppet class for installing docker and two defined types
+for managing images and containers.
+.SS Installation
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+include \(aqdocker\(aq
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Images
+.sp
+The next step is probably to install a docker image, for this we have a
+defined type which can be used like so:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker::image { \(aqbase\(aq: }
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This is equivalent to running:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker pull base
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Note that it will only if the image of that name does not already exist.
+This is downloading a large binary so on first run can take a while.
+For that reason this define turns off the default 5 minute timeout
+for exec. Note that you can also remove images you no longer need with:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker::image { \(aqbase\(aq:
+  ensure => \(aqabsent\(aq,
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Containers
+.sp
+Now you have an image you can run commands within a container managed by
+docker.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker::run { \(aqhelloworld\(aq:
+  image   => \(aqbase\(aq,
+  command => \(aq/bin/sh \-c "while true; do echo hello world; sleep 1; done"\(aq,
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This is equivalent to running the following command, but under upstart:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker run \-d base /bin/sh \-c "while true; do echo hello world; sleep 1; done"
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Run also contains a number of optional parameters:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker::run { \(aqhelloworld\(aq:
+  image        => \(aqbase\(aq,
+  command      => \(aq/bin/sh \-c "while true; do echo hello world; sleep 1; done"\(aq,
+  ports        => [\(aq4444\(aq, \(aq4555\(aq],
+  volumes      => [\(aq/var/lib/counchdb\(aq, \(aq/var/log\(aq],
+  volumes_from => \(aq6446ea52fbc9\(aq,
+  memory_limit => 10485760, # bytes
+  username     => \(aqexample\(aq,
+  hostname     => \(aqexample.com\(aq,
+  env          => [\(aqFOO=BAR\(aq, \(aqFOO2=BAR2\(aq],
+  dns          => [\(aq8.8.8.8\(aq, \(aq8.8.4.4\(aq],
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Note that ports, env, dns and volumes can be set with either a single string
+or as above with an array of values.
 .SH EXAMPLES
 .sp
 Contents:
+.SS Running the Examples
+.sp
+All the examples assume your machine is running the docker daemon. To run the docker daemon in the background, simply type:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+sudo docker \-d &
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+Now you can run docker in client mode: all commands will be forwarded to the docker daemon, so the client
+can run from any account.
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# now you can run docker commands from any account.
+docker help
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
 .SS Hello World
 .sp
-This is the most basic example available for using docker
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+This example assumes you have Docker running in daemon mode. For more information please see \fIrunning_examples\fP
+.UNINDENT
+.UNINDENT
 .sp
-This example assumes you have Docker installed.
+This is the most basic example available for using Docker.
 .sp
 Download the base container
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -504,9 +2144,13 @@ Download the base container
 docker pull base
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 The \fIbase\fP image is a minimal \fIubuntu\fP based container, alternatively you can select \fIbusybox\fP, a bare
 minimal linux system. The images are retrieved from the docker repository.
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -514,6 +2158,8 @@ minimal linux system. The images are retrieved from the docker repository.
 docker run base /bin/echo hello world
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 \fBExplanation:\fP
 .INDENT 0.0
@@ -534,6 +2180,13 @@ See the example in action
 Continue to the \fIhello_world_daemon\fP example.
 .SS Hello World Daemon
 .sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+This example assumes you have Docker running in daemon mode. For more information please see \fIrunning_examples\fP
+.UNINDENT
+.UNINDENT
+.sp
 The most boring daemon ever written.
 .sp
 This example assumes you have Docker installed and with the base image already imported \fBdocker pull base\fP.
@@ -541,14 +2194,18 @@ We will use the base image to run a simple hello world daemon that will just pri
 out every second. It will continue to do this until we stop it.
 .sp
 \fBSteps:\fP
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-$ CONTAINER_ID=$(docker run \-d base /bin/sh \-c "while true; do echo hello world; sleep 1; done")
+CONTAINER_ID=$(docker run \-d base /bin/sh \-c "while true; do echo hello world; sleep 1; done")
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
-We are going to run a simple hello world daemon in a new container made from the busybox daemon.
+We are going to run a simple hello world daemon in a new container made from the base image.
 .INDENT 0.0
 .IP \(bu 2
 \fB"docker run \-d "\fP run a command in a new container. We pass "\-d" so it runs as a daemon.
@@ -561,12 +2218,16 @@ We are going to run a simple hello world daemon in a new container made from the
 .IP \(bu 2
 \fB$CONTAINER_ID\fP the output of the run command will return a container id, we can use in future commands to see what is going on with this process.
 .UNINDENT
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-$ docker logs $CONTAINER_ID
+docker logs $CONTAINER_ID
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 Check the logs make sure it is working correctly.
 .INDENT 0.0
@@ -575,12 +2236,16 @@ Check the logs make sure it is working correctly.
 .IP \(bu 2
 \fB$CONTAINER_ID\fP The Id of the container we want the logs for.
 .UNINDENT
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 docker attach $CONTAINER_ID
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 Attach to the container to see the results in realtime.
 .INDENT 0.0
@@ -589,24 +2254,32 @@ Attach to the container to see the results in realtime.
 .IP \(bu 2
 \fB$CONTAINER_ID\fP The Id of the container we want to attach too.
 .UNINDENT
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 docker ps
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 Check the process list to make sure it is running.
 .INDENT 0.0
 .IP \(bu 2
 \fB"docker ps"\fP this shows all running process managed by docker
 .UNINDENT
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-$ docker stop $CONTAINER_ID
+docker stop $CONTAINER_ID
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 Stop the container, since we don\(aqt need it anymore.
 .INDENT 0.0
@@ -615,12 +2288,16 @@ Stop the container, since we don\(aqt need it anymore.
 .IP \(bu 2
 \fB$CONTAINER_ID\fP The Id of the container we want to stop.
 .UNINDENT
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 docker ps
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 Make sure it is really stopped.
 .sp
@@ -629,257 +2306,858 @@ Make sure it is really stopped.
 See the example in action
 .sp
 Continue to the \fIpython_web_app\fP example.
-.SS Notes:
+.SS Python Web App
+.sp
+\fBNOTE:\fP
 .INDENT 0.0
-.IP \(bu 2
-\fBDocker daemon\fP The docker daemon is started by \fBsudo docker \-d\fP, Vagrant may have started
-the Docker daemon for you, but you will need to restart it this way if it was terminated. Otherwise
-it may give you \fBCouldn\(aqt create Tag store: open /var/lib/docker/repositories: permission denied\fP
+.INDENT 3.5
+This example assumes you have Docker running in daemon mode. For more information please see \fIrunning_examples\fP
 .UNINDENT
-.SS Building a python web app
+.UNINDENT
 .sp
 The goal of this example is to show you how you can author your own docker images using a parent image, making changes to it, and then saving the results as a new image. We will do that by making a simple hello flask web application image.
 .sp
 \fBSteps:\fP
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-$ docker import shykes/pybuilder
+docker pull shykes/pybuilder
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
-We are importing the "shykes/pybuilder" docker image
+We are downloading the "shykes/pybuilder" docker image
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-$ URL=http://github.com/shykes/helloflask/archive/master.tar.gz
+URL=http://github.com/shykes/helloflask/archive/master.tar.gz
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 We set a URL variable that points to a tarball of a simple helloflask web app
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-$ BUILD_JOB=$(docker run \-t shykes/pybuilder:1d9aab3737242c65 /usr/local/bin/buildapp $URL)
+BUILD_JOB=$(docker run \-d \-t shykes/pybuilder:latest /usr/local/bin/buildapp $URL)
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
-Inside of the "shykes/pybuilder" image there is a command called buildapp, we are running that command and passing the $URL variable from step 2 to it, and running the whole thing inside of a new container. BUILD_JOB will be set with the new container_id. "1d9aab3737242c65" came from the output of step 1 when importing image. also available from \(aqdocker images\(aq.
+Inside of the "shykes/pybuilder" image there is a command called buildapp, we are running that command and passing the $URL variable from step 2 to it, and running the whole thing inside of a new container. BUILD_JOB will be set with the new container_id.
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-$ docker attach $BUILD_JOB
+docker attach $BUILD_JOB
 [...]
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 We attach to the new container to see what is going on. Ctrl\-C to disconnect
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-$ BUILD_IMG=$(docker commit $BUILD_JOB _/builds/github.com/hykes/helloflask/master)
+BUILD_IMG=$(docker commit $BUILD_JOB _/builds/github.com/shykes/helloflask/master)
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 Save the changed we just made in the container to a new image called "_/builds/github.com/hykes/helloflask/master" and save the image id in the BUILD_IMG variable name.
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-$ WEB_WORKER=$(docker run \-p 5000 $BUILD_IMG /usr/local/bin/runapp)
+WEB_WORKER=$(docker run \-d \-p 5000 $BUILD_IMG /usr/local/bin/runapp)
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+\fB"docker run \-d "\fP run a command in a new container. We pass "\-d" so it runs as a daemon.
+.IP \(bu 2
+\fB"\-p 5000"\fP the web app is going to listen on this port, so it must be mapped from the container to the host system.
+.IP \(bu 2
+\fB"$BUILD_IMG"\fP is the image we want to run the command inside of.
+.IP \(bu 2
+\fB/usr/local/bin/runapp\fP is the command which starts the web app.
+.UNINDENT
 .sp
 Use the new image we just created and create a new container with network port 5000, and return the container id and store in the WEB_WORKER variable.
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-$ docker logs $WEB_WORKER
+docker logs $WEB_WORKER
  * Running on http://0.0.0.0:5000/
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
 view the logs for the new container using the WEB_WORKER variable, and if everything worked as planned you should see the line "Running on \fI\%http://0.0.0.0:5000/\fP" in the log output.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+WEB_PORT=$(docker port $WEB_WORKER 5000)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+lookup the public\-facing port which is NAT\-ed store the private port used by the container and store it inside of the WEB_PORT variable.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# install curl if necessary, then ...
+curl http://127.0.0.1:$WEB_PORT
+  Hello world!
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+access the web app using curl. If everything worked as planned you should see the line "Hello world!" inside of your console.
 .sp
 \fBVideo:\fP
 .sp
 See the example in action
 .sp
-Continue to the \fI\%base commands\fP
-.SH CONTRIBUTING
-.SS Contributing to Docker
+Continue to \fIrunning_ssh_service\fP.
+.SS Node.js Web App
 .sp
-Want to hack on Docker? Awesome! There are instructions to get you
-started on the website: \fI\%http://docker.io/gettingstarted.html\fP
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+This example assumes you have Docker running in daemon mode. For more information please see \fIrunning_examples\fP
+.UNINDENT
+.UNINDENT
 .sp
-They are probably not perfect, please let us know if anything feels
-wrong or incomplete.
-.SS Contribution guidelines
-.SS Pull requests are always welcome
+The goal of this example is to show you how you can build your own docker images
+from a parent image using a \fBDockerfile\fP . We will do that by making a simple
+Node.js hello world web application running on CentOS. You can get the full
+source code at \fI\%https://github.com/gasi/docker-node-hello\fP.
+.SS Create Node.js app
 .sp
-We are always thrilled to receive pull requests, and do our best to
-process them as fast as possible. Not sure if that typo is worth a pull
-request? Do it! We will appreciate it.
-.sp
-If your pull request is not accepted on the first try, don\(aqt be
-discouraged! If there\(aqs a problem with the implementation, hopefully you
-received feedback on what to improve.
-.sp
-We\(aqre trying very hard to keep Docker lean and focused. We don\(aqt want it
-to do everything for everybody. This means that we might decide against
-incorporating a new feature. However, there might be a way to implement
-that feature \fIon top of\fP docker.
-.SS Discuss your design on the mailing list
-.sp
-We recommend discussing your plans \fI\%on the mailing
-list\fP
-before starting to code \- especially for more ambitious contributions.
-This gives other contributors a chance to point you in the right
-direction, give feedback on your design, and maybe point out if someone
-else is working on the same thing.
-.SS Create issues...
-.sp
-Any significant improvement should be documented as \fI\%a github
-issue\fP before anybody
-starts working on it.
-.SS ...but check for existing issues first!
-.sp
-Please take a moment to check that an issue doesn\(aqt already exist
-documenting your bug report or improvement proposal. If it does, it
-never hurts to add a quick "+1" or "I have this problem too". This will
-help prioritize the most common problems and requests.
-.SS Write tests
-.sp
-Golang has a great testing suite built in: use it! Take a look at
-existing tests for inspiration.
-.SS Setting up a dev environment
-.sp
-Instructions that have been verified to work on Ubuntu 12.10,
-.sp
-Then run the docker daemon,
-.sp
-Run the \fBgo install\fP command (above) to recompile docker.
-.SH COMMANDS
-.sp
-Contents:
-.SS Base commands
-.SS Running an interactive shell
+First, create a \fBpackage.json\fP file that describes your app and its
+dependencies:
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-# Download a base image
-docker import base
-
-# Run an interactive shell in the base image,
-# allocate a tty, attach stdin and stdout
-docker run \-a \-i \-t base /bin/bash
+{
+  "name": "docker\-centos\-hello",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Node.js Hello World app on CentOS using docker",
+  "author": "Daniel Gasienica <daniel@gasienica.ch>",
+  "dependencies": {
+    "express": "3.2.4"
+  }
+}
 .ft P
 .fi
-.SS Starting a long\-running worker process
+.UNINDENT
+.UNINDENT
+.sp
+Then, create an \fBindex.js\fP file that defines a web app using the
+\fI\%Express.js\fP framework:
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-# Run docker in daemon mode
-(docker \-d || echo "Docker daemon already running") &
+var express = require(\(aqexpress\(aq);
 
-# Start a very useful long\-running process
-JOB=$(docker run base /bin/sh \-c "while true; do echo Hello world!; sleep 1; done")
+// Constants
+var PORT = 8080;
 
-# Collect the output of the job so far
-docker logs $JOB
+// App
+var app = express();
+app.get(\(aq/\(aq, function (req, res) {
+  res.send(\(aqHello World\en\(aq);
+});
 
-# Kill the job
-docker kill $JOB
+app.listen(PORT)
+console.log(\(aqRunning on http://localhost:\(aq + PORT);
 .ft P
 .fi
-.SS Listing all running containers
+.UNINDENT
+.UNINDENT
+.sp
+In the next steps, we’ll look at how you can run this app inside a CentOS
+container using docker. First, you’ll need to build a docker image of your app.
+.SS Creating a \fBDockerfile\fP
+.sp
+Create an empty file called \fBDockerfile\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+touch Dockerfile
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Open the \fBDockerfile\fP in your favorite text editor and add the following line
+that defines the version of docker the image requires to build
+(this example uses docker 0.3.4):
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# DOCKER\-VERSION 0.3.4
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Next, define the parent image you want to use to build your own image on top of.
+Here, we’ll use \fI\%CentOS\fP (tag: \fB6.4\fP)
+available on the \fI\%docker index\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+FROM    centos:6.4
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Since we’re building a Node.js app, you’ll have to install Node.js as well as
+npm on your CentOS image. Node.js is required to run your app and npm to install
+your app’s dependencies defined in \fBpackage.json\fP.
+To install the right package for CentOS, we’ll use the instructions from the
+\fI\%Node.js wiki\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Enable EPEL for Node.js
+RUN     rpm \-Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel\-release\-6\-8.noarch.rpm
+# Install Node.js and npm
+RUN     yum install \-y npm\-1.2.17\-5.el6
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+To bundle your app’s source code inside the docker image, use the \fBADD\fP
+command:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Bundle app source
+ADD . /src
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Install your app dependencies using npm:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Install app dependencies
+RUN cd /src; npm install
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Your app binds to port \fB8080\fP so you’ll use the \fBEXPOSE\fP command to have it
+mapped by the docker daemon:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+EXPOSE  8080
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Last but not least, define the command to run your app using \fBCMD\fP which
+defines your runtime, i.e. \fBnode\fP, and the path to our app, i.e.
+\fBsrc/index.js\fP (see the step where we added the source to the container):
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+CMD ["node", "/src/index.js"]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Your \fBDockerfile\fP should now look like this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# DOCKER\-VERSION 0.3.4
+FROM    centos:6.4
+
+# Enable EPEL for Node.js
+RUN     rpm \-Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel\-release\-6\-8.noarch.rpm
+# Install Node.js and npm
+RUN     yum install \-y npm\-1.2.17\-5.el6
+
+# Bundle app source
+ADD . /src
+# Install app dependencies
+RUN cd /src; npm install
+
+EXPOSE  8080
+CMD ["node", "/src/index.js"]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Building your image
+.sp
+Go to the directory that has your \fBDockerfile\fP and run the following command
+to build a docker image. The \fB\-t\fP flag let’s you tag your image so it’s easier
+to find later using the \fBdocker images\fP command:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker build \-t <your username>/centos\-node\-hello .
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Your image will now be listed by docker:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker images
+
+> # Example
+> REPOSITORY                 TAG       ID              CREATED
+> centos                     6.4       539c0211cd76    8 weeks ago
+> gasi/centos\-node\-hello     latest    d64d3505b0d2    2 hours ago
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Run the image
+.sp
+Running your image with \fB\-d\fP runs the container in detached mode, leaving the
+container running in the background. Run the image you previously built:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker run \-d <your username>/centos\-node\-hello
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Print the output of your app:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Get container ID
+docker ps
+
+# Print app output
+docker logs <container id>
+
+> # Example
+> Running on http://localhost:8080
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Test
+.sp
+To test your app, get the the port of your app that docker mapped:
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 docker ps
+
+> # Example
+> ID            IMAGE                          COMMAND              ...   PORTS
+> ecce33b30ebf  gasi/centos\-node\-hello:latest  node /src/index.js         49160\->8080
 .ft P
 .fi
-.SS Expose a service on a TCP port
+.UNINDENT
+.UNINDENT
+.sp
+In the example above, docker mapped the \fB8080\fP port of the container to
+\fB49160\fP.
+.sp
+Now you can call your app using \fBcurl\fP (install if needed via:
+\fBsudo apt\-get install curl\fP):
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-# Expose port 4444 of this container, and tell netcat to listen on it
-JOB=$(docker run \-p 4444 base /bin/nc \-l \-p 4444)
+curl \-i localhost:49160
 
-# Which public port is NATed to my container?
-PORT=$(docker port $JOB 4444)
-
-# Connect to the public port via the host\(aqs public address
-echo hello world | nc $(hostname) $PORT
-
-# Verify that the network connection worked
-echo "Daemon received: $(docker logs $JOB)"
+> HTTP/1.1 200 OK
+> X\-Powered\-By: Express
+> Content\-Type: text/html; charset=utf\-8
+> Content\-Length: 12
+> Date: Sun, 02 Jun 2013 03:53:22 GMT
+> Connection: keep\-alive
+>
+> Hello World
 .ft P
 .fi
+.UNINDENT
+.UNINDENT
 .sp
-Continue to the complete \fI\%Command Line Interface\fP
-.SS Command Line Interface
+We hope this tutorial helped you get up and running with Node.js and CentOS on
+docker. You can get the full source code at
+\fI\%https://github.com/gasi/docker-node-hello\fP.
+.sp
+Continue to \fIrunning_redis_service\fP.
+.SS Redis Service
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+This example assumes you have Docker running in daemon mode. For more information please see \fIrunning_examples\fP
+.UNINDENT
+.UNINDENT
+.sp
+Very simple, no frills, redis service.
+.SS Open a docker container
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker run \-i \-t base /bin/bash
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Building your image
+.sp
+Update your docker container, install the redis server.  Once installed, exit out of docker.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+apt\-get update
+apt\-get install redis\-server
+exit
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Snapshot the installation
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker ps \-a  # grab the container id (this will be the first one in the list)
+docker commit <container_id> <your username>/redis
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Run the service
+.sp
+Running the service with \fI\-d\fP runs the container in detached mode, leaving the
+container running in the background. Use your snapshot.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker run \-d \-p 6379 <your username>/redis /usr/bin/redis\-server
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Test 1
+.sp
+Connect to the container with the redis\-cli.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker ps  # grab the new container id
+docker inspect <container_id>    # grab the ipaddress of the container
+redis\-cli \-h <ipaddress> \-p 6379
+redis 10.0.3.32:6379> set docker awesome
+OK
+redis 10.0.3.32:6379> get docker
+"awesome"
+redis 10.0.3.32:6379> exit
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Test 2
+.sp
+Connect to the host os with the redis\-cli.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker ps  # grab the new container id
+docker port <container_id> 6379  # grab the external port
+ip addr show   # grab the host ip address
+redis\-cli \-h <host ipaddress> \-p <external port>
+redis 192.168.0.1:49153> set docker awesome
+OK
+redis 192.168.0.1:49153> get docker
+"awesome"
+redis 192.168.0.1:49153> exit
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS SSH Daemon Service
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+This example assumes you have Docker running in daemon mode. For more information please see \fIrunning_examples\fP
+.UNINDENT
+.UNINDENT
+.sp
+\fBVideo:\fP
+.sp
+I\(aqve create a little screencast to show how to create a sshd service and connect to it. It is something like 11
+minutes and not entirely smooth, but gives you a good idea.
+.sp
+You can also get this sshd container by using
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker pull dhrp/sshd
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The password is \(aqscreencast\(aq
+.sp
+\fBVideo\(aqs Transcription:\fP
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+# Hello! We are going to try and install openssh on a container and run it as a servic
+# let\(aqs pull base to get a base ubuntu image.
+$ docker pull base
+# I had it so it was quick
+# now let\(aqs connect using \-i for interactive and with \-t for terminal
+# we execute /bin/bash to get a prompt.
+$ docker run \-i \-t base /bin/bash
+# now let\(aqs commit it
+# which container was it?
+$ docker ps \-a |more
+$ docker commit a30a3a2f2b130749995f5902f079dc6ad31ea0621fac595128ec59c6da07feea dhrp/sshd
+# I gave the name dhrp/sshd for the container
+# now we can run it again
+$ docker run \-d dhrp/sshd /usr/sbin/sshd \-D # D for daemon mode
+# is it running?
+$ docker ps
+# yes!
+# let\(aqs stop it
+$ docker stop 0ebf7cec294755399d063f4b1627980d4cbff7d999f0bc82b59c300f8536a562
+$ docker ps
+# and reconnect, but now open a port to it
+$ docker run \-d \-p 22 dhrp/sshd /usr/sbin/sshd \-D
+$ docker port b2b407cf22cf8e7fa3736fa8852713571074536b1d31def3fdfcd9fa4fd8c8c5 22
+# it has now given us a port to connect to
+# we have to connect using a public ip of our host
+$ hostname
+# *ifconfig* is deprecated, better use *ip addr show* now
+$ ifconfig
+$ ssh root@192.168.33.10 \-p 49153
+# Ah! forgot to set root passwd
+$ docker commit b2b407cf22cf8e7fa3736fa8852713571074536b1d31def3fdfcd9fa4fd8c8c5 dhrp/sshd
+$ docker ps \-a
+$ docker run \-i \-t dhrp/sshd /bin/bash
+$ passwd
+$ exit
+$ docker commit 9e863f0ca0af31c8b951048ba87641d67c382d08d655c2e4879c51410e0fedc1 dhrp/sshd
+$ docker run \-d \-p 22 dhrp/sshd /usr/sbin/sshd \-D
+$ docker port a0aaa9558c90cf5c7782648df904a82365ebacce523e4acc085ac1213bfe2206 22
+# *ifconfig* is deprecated, better use *ip addr show* now
+$ ifconfig
+$ ssh root@192.168.33.10 \-p 49154
+# Thanks for watching, Thatcher thatcher@dotcloud.com
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS CouchDB Service
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+This example assumes you have Docker running in daemon mode. For more information please see \fIrunning_examples\fP
+.UNINDENT
+.UNINDENT
+.sp
+Here\(aqs an example of using data volumes to share the same data between 2 couchdb containers.
+This could be used for hot upgrades, testing different versions of couchdb on the same data, etc.
+.SS Create first database
+.sp
+Note that we\(aqre marking /var/lib/couchdb as a data volume.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+COUCH1=$(docker run \-d \-v /var/lib/couchdb shykes/couchdb:2013\-05\-03)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Add data to the first database
+.sp
+We\(aqre assuming your docker host is reachable at \fIlocalhost\fP. If not, replace \fIlocalhost\fP with the public IP of your docker host.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HOST=localhost
+URL="http://$HOST:$(docker port $COUCH1 5984)/_utils/"
+echo "Navigate to $URL in your browser, and use the couch interface to add data"
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Create second database
+.sp
+This time, we\(aqre requesting shared access to $COUCH1\(aqs volumes.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+COUCH2=$(docker run \-d \-volumes\-from $COUCH1) shykes/couchdb:2013\-05\-03)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Browse data on the second database
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HOST=localhost
+URL="http://$HOST:$(docker port $COUCH2 5984)/_utils/"
+echo "Navigate to $URL in your browser. You should see the same data as in the first database!"
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Congratulations, you are running 2 Couchdb containers, completely isolated from each other \fIexcept\fP for their data.
+.SH COMMANDS
+.sp
+Contents:
+.SS Overview
 .SS Docker Usage
+.sp
+To list available commands, either run \fBdocker\fP with no parameters or execute
+\fBdocker help\fP:
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 $ docker
-  Usage: docker COMMAND [arg...]
+  Usage: docker [OPTIONS] COMMAND [arg...]
+    \-H=[tcp://127.0.0.1:4243]: tcp://host:port to bind/connect to or unix://path/to/socket to use
 
   A self\-sufficient runtime for linux containers.
 
-  Commands:
-      attach    Attach to a running container
-      commit    Create a new image from a container\(aqs changes
-      diff      Inspect changes on a container\(aqs filesystem
-      export    Stream the contents of a container as a tar archive
-      history   Show the history of an image
-      images    List images
-      import    Create a new filesystem image from the contents of a tarball
-      info      Display system\-wide information
-      inspect   Return low\-level information on a container
-      kill      Kill a running container
-      login     Register or Login to the docker registry server
-      logs      Fetch the logs of a container
-      port      Lookup the public\-facing port which is NAT\-ed to PRIVATE_PORT
-      ps        List containers
-      pull      Pull an image or a repository to the docker registry server
-      push      Push an image or a repository to the docker registry server
-      restart   Restart a running container
-      rm        Remove a container
-      rmi       Remove an image
-      run       Run a command in a new container
-      start     Start a stopped container
-      stop      Stop a running container
-      tag       Tag an image into a repository
-      version   Show the docker version information
-      wait      Block until a container stops, then print its exit code
+  ...
 .ft P
 .fi
-.SS attach
+.UNINDENT
+.UNINDENT
+.SS Available Commands
+.SS \fBattach\fP \-\- Attach to a running container
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-Usage: docker attach [OPTIONS]
+Usage: docker attach CONTAINER
 
 Attach to a running container
-
-  \-e=true: Attach to stderr
-  \-i=false: Attach to stdin
-  \-o=true: Attach to stdout
 .ft P
 .fi
-.SS commit
+.UNINDENT
+.UNINDENT
+.SS \fBbuild\fP \-\- Build a container from a Dockerfile
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-Usage: docker commit [OPTIONS] CONTAINER [DEST]
+Usage: docker build [OPTIONS] PATH | URL | \-
+Build a new container image from the source code at PATH
+  \-t="": Tag to be applied to the resulting image in case of success.
+  \-q=false: Suppress verbose build output.
+When a single Dockerfile is given as URL, then no context is set. When a git repository is set as URL, the repository is used as context
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Examples
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker build .
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.nf
+This will read the Dockerfile from the current directory. It will also send any other files and directories found in the current directory to the docker daemon.
+The contents of this directory would be used by ADD commands found within the Dockerfile.
+This will send a lot of data to the docker daemon if the current directory contains a lot of data.
+If the absolute path is provided instead of \(aq.\(aq, only the files and directories required by the ADD commands from the Dockerfile will be added to the context and transferred to the docker daemon.
+
+.fi
+.sp
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker build \- < Dockerfile
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.nf
+This will read a Dockerfile from Stdin without context. Due to the lack of a context, no contents of any local directory will be sent to the docker daemon.
+ADD doesn\(aqt work when running in this mode due to the absence of the context, thus having no source files to copy to the container.
+.fi
+.sp
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker build github.com/creack/docker\-firefox
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.nf
+This will clone the github repository and use it as context. The Dockerfile at the root of the repository is used as Dockerfile.
+Note that you can specify an arbitrary git repository by using the \(aqgit://\(aq schema.
+.fi
+.sp
+.SS \fBcommit\fP \-\- Create a new image from a container\(aqs changes
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker commit [OPTIONS] CONTAINER [REPOSITORY [TAG]]
 
 Create a new image from a container\(aqs changes
 
-\-m="": Commit message
+  \-m="": Commit message
+  \-author="": Author (eg. "John Hannibal Smith <hannibal@a\-team.com>"
+  \-run="": Config automatically applied when the image is run. "+\(ga(ex: {"Cmd": ["cat", "/world"], "PortSpecs": ["22"]}\(aq)
 .ft P
 .fi
-.SS diff
+.UNINDENT
+.UNINDENT
+.sp
+Full \-run example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+{"Hostname": "",
+ "User": "",
+ "CpuShares": 0,
+ "Memory": 0,
+ "MemorySwap": 0,
+ "PortSpecs": ["22", "80", "443"],
+ "Tty": true,
+ "OpenStdin": true,
+ "StdinOnce": true,
+ "Env": ["FOO=BAR", "FOO2=BAR2"],
+ "Cmd": ["cat", "\-e", "/etc/resolv.conf"],
+ "Dns": ["8.8.8.8", "8.8.4.4"]}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBdiff\fP \-\- Inspect changes on a container\(aqs filesystem
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -888,7 +3166,11 @@ Usage: docker diff CONTAINER [OPTIONS]
 Inspect changes on a container\(aqs filesystem
 .ft P
 .fi
-.SS export
+.UNINDENT
+.UNINDENT
+.SS \fBexport\fP \-\- Stream the contents of a container as a tar archive
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -897,7 +3179,11 @@ Usage: docker export CONTAINER
 Export the contents of a filesystem as a tar archive
 .ft P
 .fi
-.SS history
+.UNINDENT
+.UNINDENT
+.SS \fBhistory\fP \-\- Show the history of an image
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -906,7 +3192,11 @@ Usage: docker history [OPTIONS] IMAGE
 Show the history of an image
 .ft P
 .fi
-.SS images
+.UNINDENT
+.UNINDENT
+.SS \fBimages\fP \-\- List images
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -916,14 +3206,58 @@ List images
 
   \-a=false: show all images
   \-q=false: only show numeric IDs
+  \-viz=false: output in graphviz format
 .ft P
 .fi
-.SS import
+.UNINDENT
+.UNINDENT
+.SS Displaying images visually
+.INDENT 0.0
+.INDENT 3.5
 .sp
-Usage: docker import [OPTIONS] URL|\- [REPOSITORY [TAG]]
+.nf
+.ft C
+docker images \-viz | dot \-Tpng \-o docker.png
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+[image]
+.SS \fBimport\fP \-\- Create a new filesystem image from the contents of a tarball
+.INDENT 0.0
+.INDENT 3.5
 .sp
+.nf
+.ft C
+Usage: docker import URL|\- [REPOSITORY [TAG]]
+
 Create a new filesystem image from the contents of a tarball
-.SS info
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+At this time, the URL must start with \fBhttp\fP and point to a single file archive (.tar, .tar.gz, .bzip)
+containing a root filesystem. If you would like to import from a local directory or archive,
+you can use the \fB\-\fP parameter to take the data from standard in.
+.SS Examples
+.SS Import from a remote location
+.sp
+\fB$ docker import http://example.com/exampleimage.tgz exampleimagerepo\fP
+.SS Import from a local file
+.sp
+Import to docker via pipe and standard in
+.sp
+\fB$ cat exampleimage.tgz | docker import \- exampleimagelocal\fP
+.SS Import from a local directory
+.sp
+\fB$ sudo tar \-c . | docker import \- exampleimagedir\fP
+.sp
+Note the \fBsudo\fP in this example \-\- you must preserve the ownership of the files (especially root ownership)
+during the archiving with tar. If you are not root (or sudo) when you tar, then the ownerships might not get preserved.
+.SS \fBinfo\fP \-\- Display system\-wide information
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -932,7 +3266,11 @@ Usage: docker info
 Display system\-wide information.
 .ft P
 .fi
-.SS inspect
+.UNINDENT
+.UNINDENT
+.SS \fBinspect\fP \-\- Return low\-level information on a container
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -941,7 +3279,11 @@ Usage: docker inspect [OPTIONS] CONTAINER
 Return low\-level information on a container
 .ft P
 .fi
-.SS kill
+.UNINDENT
+.UNINDENT
+.SS \fBkill\fP \-\- Kill a running container
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -950,16 +3292,28 @@ Usage: docker kill [OPTIONS] CONTAINER [CONTAINER...]
 Kill a running container
 .ft P
 .fi
-.SS login
+.UNINDENT
+.UNINDENT
+.SS \fBlogin\fP \-\- Register or Login to the docker registry server
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-Usage: docker login
+Usage: docker login [OPTIONS]
 
 Register or Login to the docker registry server
+
+\-e="": email
+\-p="": password
+\-u="": username
 .ft P
 .fi
-.SS logs
+.UNINDENT
+.UNINDENT
+.SS \fBlogs\fP \-\- Fetch the logs of a container
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -968,7 +3322,11 @@ Usage: docker logs [OPTIONS] CONTAINER
 Fetch the logs of a container
 .ft P
 .fi
-.SS port
+.UNINDENT
+.UNINDENT
+.SS \fBport\fP \-\- Lookup the public\-facing port which is NAT\-ed to PRIVATE_PORT
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -977,7 +3335,11 @@ Usage: docker port [OPTIONS] CONTAINER PRIVATE_PORT
 Lookup the public\-facing port which is NAT\-ed to PRIVATE_PORT
 .ft P
 .fi
-.SS ps
+.UNINDENT
+.UNINDENT
+.SS \fBps\fP \-\- List containers
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -990,7 +3352,11 @@ List containers
   \-q=false: Only display numeric IDs
 .ft P
 .fi
-.SS pull
+.UNINDENT
+.UNINDENT
+.SS \fBpull\fP \-\- Pull an image or a repository from the docker registry server
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -999,7 +3365,11 @@ Usage: docker pull NAME
 Pull an image or a repository from the registry
 .ft P
 .fi
-.SS push
+.UNINDENT
+.UNINDENT
+.SS \fBpush\fP \-\- Push an image or a repository to the docker registry server
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -1008,7 +3378,11 @@ Usage: docker push NAME
 Push an image or a repository to the registry
 .ft P
 .fi
-.SS restart
+.UNINDENT
+.UNINDENT
+.SS \fBrestart\fP \-\- Restart a running container
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -1017,45 +3391,79 @@ Usage: docker restart [OPTIONS] NAME
 Restart a running container
 .ft P
 .fi
-.SS rm
+.UNINDENT
+.UNINDENT
+.SS \fBrm\fP \-\- Remove a container
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
 Usage: docker rm [OPTIONS] CONTAINER
 
-Remove a container
+Remove one or more containers
 .ft P
 .fi
-.SS rmi
+.UNINDENT
+.UNINDENT
+.SS \fBrmi\fP \-\- Remove an image
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-Usage: docker rmi [OPTIONS] IMAGE
+Usage: docker rmi IMAGE [IMAGE...]
 
-Remove an image
-
-  \-a=false: Use IMAGE as a path and remove ALL images in this path
-  \-r=false: Use IMAGE as a regular expression instead of an exact name
+Remove one or more images
 .ft P
 .fi
-.SS run
+.UNINDENT
+.UNINDENT
+.SS \fBrun\fP \-\- Run a command in a new container
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-Usage: docker run [OPTIONS] IMAGE COMMAND [ARG...]
+Usage: docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
 
 Run a command in a new container
 
-  \-a=false: Attach stdin and stdout
-  \-c="": Comment
+  \-a=map[]: Attach to stdin, stdout or stderr.
+  \-c=0: CPU shares (relative weight)
+  \-d=false: Detached mode: leave the container running in the background
+  \-e=[]: Set environment variables
+  \-h="": Container host name
   \-i=false: Keep stdin open even if not attached
   \-m=0: Memory limit (in bytes)
   \-p=[]: Map a network port to the container
   \-t=false: Allocate a pseudo\-tty
   \-u="": Username or UID
+  \-d=[]: Set custom dns servers for the container
+  \-v=[]: Create a bind mount with: [host\-dir]:[container\-dir]:[rw|ro]. If "host\-dir" is missing, then docker creates a new volume.
+  \-volumes\-from="": Mount all volumes from the given container.
+  \-entrypoint="": Overwrite the default entrypoint set by the image.
 .ft P
 .fi
-.SS start
+.UNINDENT
+.UNINDENT
+.SS \fBsearch\fP \-\- Search for an image in the docker index
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker search TERM
+
+Searches for the TERM parameter on the Docker index and prints out a list of repositories
+that match.
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBstart\fP \-\- Start a stopped container
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -1064,7 +3472,11 @@ Usage: docker start [OPTIONS] NAME
 Start a stopped container
 .ft P
 .fi
-.SS stop
+.UNINDENT
+.UNINDENT
+.SS \fBstop\fP \-\- Stop a running container
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -1073,7 +3485,11 @@ Usage: docker stop [OPTIONS] NAME
 Stop a running container
 .ft P
 .fi
-.SS tag
+.UNINDENT
+.UNINDENT
+.SS \fBtag\fP \-\- Tag an image into a repository
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -1084,16 +3500,25 @@ Tag an image into a repository
   \-f=false: Force
 .ft P
 .fi
-.SS version
+.UNINDENT
+.UNINDENT
+.SS \fBtop\fP \-\- Lookup the running processes of a container
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
-Usage: docker version
+Usage: docker top CONTAINER
 
-Show the docker version information
+Lookup the running processes of a container
 .ft P
 .fi
-.SS wait
+.UNINDENT
+.UNINDENT
+.SS \fBversion\fP \-\- Show the docker version information
+.SS \fBwait\fP \-\- Block until a container stops, then print its exit code
+.INDENT 0.0
+.INDENT 3.5
 .sp
 .nf
 .ft C
@@ -1102,41 +3527,3598 @@ Usage: docker wait [OPTIONS] NAME
 Block until a container stops, then print its exit code.
 .ft P
 .fi
-.SH FAQ
-.SS Most frequently asked questions.
+.UNINDENT
+.UNINDENT
+.SS \fBattach\fP \-\- Attach to a running container
+.INDENT 0.0
+.INDENT 3.5
 .sp
-\fB1. How much does Docker cost?\fP
+.nf
+.ft C
+Usage: docker attach CONTAINER
+
+Attach to a running container
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBbuild\fP \-\- Build a container from a Dockerfile
+.INDENT 0.0
+.INDENT 3.5
 .sp
-Docker is 100% free, it is open source, so you can use it without paying.
+.nf
+.ft C
+Usage: docker build [OPTIONS] PATH | URL | \-
+Build a new container image from the source code at PATH
+  \-t="": Tag to be applied to the resulting image in case of success.
+  \-q=false: Suppress verbose build output.
+When a single Dockerfile is given as URL, then no context is set. When a git repository is set as URL, the repository is used as context
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Examples
+.INDENT 0.0
+.INDENT 3.5
 .sp
-\fB2. What open source license are you using?\fP
+.nf
+.ft C
+docker build .
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.nf
+This will read the Dockerfile from the current directory. It will also send any other files and directories found in the current directory to the docker daemon.
+The contents of this directory would be used by ADD commands found within the Dockerfile.
+This will send a lot of data to the docker daemon if the current directory contains a lot of data.
+If the absolute path is provided instead of \(aq.\(aq, only the files and directories required by the ADD commands from the Dockerfile will be added to the context and transferred to the docker daemon.
+
+.fi
 .sp
-We are using the Apache License Version 2.0, see it here: \fI\%https://github.com/dotcloud/docker/blob/master/LICENSE\fP
+.INDENT 0.0
+.INDENT 3.5
 .sp
-\fB3. Does Docker run on Mac OS X or Windows?\fP
+.nf
+.ft C
+docker build \- < Dockerfile
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.nf
+This will read a Dockerfile from Stdin without context. Due to the lack of a context, no contents of any local directory will be sent to the docker daemon.
+ADD doesn\(aqt work when running in this mode due to the absence of the context, thus having no source files to copy to the container.
+.fi
 .sp
-Not at this time, Docker currently only runs on Linux, but you can use VirtualBox to run Docker in a virtual machine on your box, and get the best of both worlds. Check out the \fI\%MacOSX\fP and \fI\%Windows\fP intallation guides.
+.INDENT 0.0
+.INDENT 3.5
 .sp
-\fB4. How do containers compare to virtual machines?\fP
+.nf
+.ft C
+docker build github.com/creack/docker\-firefox
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.nf
+This will clone the github repository and use it as context. The Dockerfile at the root of the repository is used as Dockerfile.
+Note that you can specify an arbitrary git repository by using the \(aqgit://\(aq schema.
+.fi
 .sp
-They are complementary. VMs are best used to allocate chunks of hardware resources. Containers operate at the process level, which makes them very lightweight and perfect as a unit of software delivery.
+.SS \fBcommit\fP \-\- Create a new image from a container\(aqs changes
+.INDENT 0.0
+.INDENT 3.5
 .sp
-\fB5. Can I help by adding some questions and answers?\fP
+.nf
+.ft C
+Usage: docker commit [OPTIONS] CONTAINER [REPOSITORY [TAG]]
+
+Create a new image from a container\(aqs changes
+
+  \-m="": Commit message
+  \-author="": Author (eg. "John Hannibal Smith <hannibal@a\-team.com>"
+  \-run="": Config automatically applied when the image is run. "+\(ga(ex: {"Cmd": ["cat", "/world"], "PortSpecs": ["22"]}\(aq)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
 .sp
-Definitely! You can fork \fI\%the repo\fP and edit the documentation sources.
+Full \-run example:
+.INDENT 0.0
+.INDENT 3.5
 .sp
-\fB42. Where can I find more answers?\fP
+.nf
+.ft C
+{"Hostname": "",
+ "User": "",
+ "CpuShares": 0,
+ "Memory": 0,
+ "MemorySwap": 0,
+ "PortSpecs": ["22", "80", "443"],
+ "Tty": true,
+ "OpenStdin": true,
+ "StdinOnce": true,
+ "Env": ["FOO=BAR", "FOO2=BAR2"],
+ "Cmd": ["cat", "\-e", "/etc/resolv.conf"],
+ "Dns": ["8.8.8.8", "8.8.4.4"]}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBdiff\fP \-\- Inspect changes on a container\(aqs filesystem
+.INDENT 0.0
+.INDENT 3.5
 .sp
-You can find more answers on:
+.nf
+.ft C
+Usage: docker diff CONTAINER [OPTIONS]
+
+Inspect changes on a container\(aqs filesystem
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBexport\fP \-\- Stream the contents of a container as a tar archive
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker export CONTAINER
+
+Export the contents of a filesystem as a tar archive
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBhistory\fP \-\- Show the history of an image
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker history [OPTIONS] IMAGE
+
+Show the history of an image
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBimages\fP \-\- List images
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker images [OPTIONS] [NAME]
+
+List images
+
+  \-a=false: show all images
+  \-q=false: only show numeric IDs
+  \-viz=false: output in graphviz format
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Displaying images visually
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker images \-viz | dot \-Tpng \-o docker.png
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+[image]
+.SS \fBimport\fP \-\- Create a new filesystem image from the contents of a tarball
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker import URL|\- [REPOSITORY [TAG]]
+
+Create a new filesystem image from the contents of a tarball
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+At this time, the URL must start with \fBhttp\fP and point to a single file archive (.tar, .tar.gz, .bzip)
+containing a root filesystem. If you would like to import from a local directory or archive,
+you can use the \fB\-\fP parameter to take the data from standard in.
+.SS Examples
+.SS Import from a remote location
+.sp
+\fB$ docker import http://example.com/exampleimage.tgz exampleimagerepo\fP
+.SS Import from a local file
+.sp
+Import to docker via pipe and standard in
+.sp
+\fB$ cat exampleimage.tgz | docker import \- exampleimagelocal\fP
+.SS Import from a local directory
+.sp
+\fB$ sudo tar \-c . | docker import \- exampleimagedir\fP
+.sp
+Note the \fBsudo\fP in this example \-\- you must preserve the ownership of the files (especially root ownership)
+during the archiving with tar. If you are not root (or sudo) when you tar, then the ownerships might not get preserved.
+.SS \fBinfo\fP \-\- Display system\-wide information
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker info
+
+Display system\-wide information.
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBinspect\fP \-\- Return low\-level information on a container
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker inspect [OPTIONS] CONTAINER
+
+Return low\-level information on a container
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBkill\fP \-\- Kill a running container
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker kill [OPTIONS] CONTAINER [CONTAINER...]
+
+Kill a running container
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlogin\fP \-\- Register or Login to the docker registry server
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker login [OPTIONS]
+
+Register or Login to the docker registry server
+
+\-e="": email
+\-p="": password
+\-u="": username
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBlogs\fP \-\- Fetch the logs of a container
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker logs [OPTIONS] CONTAINER
+
+Fetch the logs of a container
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBport\fP \-\- Lookup the public\-facing port which is NAT\-ed to PRIVATE_PORT
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker port [OPTIONS] CONTAINER PRIVATE_PORT
+
+Lookup the public\-facing port which is NAT\-ed to PRIVATE_PORT
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBps\fP \-\- List containers
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker ps [OPTIONS]
+
+List containers
+
+  \-a=false: Show all containers. Only running containers are shown by default.
+  \-notrunc=false: Don\(aqt truncate output
+  \-q=false: Only display numeric IDs
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBpull\fP \-\- Pull an image or a repository from the docker registry server
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker pull NAME
+
+Pull an image or a repository from the registry
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBpush\fP \-\- Push an image or a repository to the docker registry server
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker push NAME
+
+Push an image or a repository to the registry
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBrestart\fP \-\- Restart a running container
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker restart [OPTIONS] NAME
+
+Restart a running container
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBrm\fP \-\- Remove a container
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker rm [OPTIONS] CONTAINER
+
+Remove one or more containers
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBrmi\fP \-\- Remove an image
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker rmi IMAGE [IMAGE...]
+
+Remove one or more images
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBrun\fP \-\- Run a command in a new container
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+Run a command in a new container
+
+  \-a=map[]: Attach to stdin, stdout or stderr.
+  \-c=0: CPU shares (relative weight)
+  \-d=false: Detached mode: leave the container running in the background
+  \-e=[]: Set environment variables
+  \-h="": Container host name
+  \-i=false: Keep stdin open even if not attached
+  \-m=0: Memory limit (in bytes)
+  \-p=[]: Map a network port to the container
+  \-t=false: Allocate a pseudo\-tty
+  \-u="": Username or UID
+  \-d=[]: Set custom dns servers for the container
+  \-v=[]: Create a bind mount with: [host\-dir]:[container\-dir]:[rw|ro]. If "host\-dir" is missing, then docker creates a new volume.
+  \-volumes\-from="": Mount all volumes from the given container.
+  \-entrypoint="": Overwrite the default entrypoint set by the image.
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBsearch\fP \-\- Search for an image in the docker index
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker search TERM
+
+Searches for the TERM parameter on the Docker index and prints out a list of repositories
+that match.
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBstart\fP \-\- Start a stopped container
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker start [OPTIONS] NAME
+
+Start a stopped container
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBstop\fP \-\- Stop a running container
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker stop [OPTIONS] NAME
+
+Stop a running container
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBtag\fP \-\- Tag an image into a repository
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker tag [OPTIONS] IMAGE REPOSITORY [TAG]
+
+Tag an image into a repository
+
+  \-f=false: Force
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS \fBversion\fP \-\- Show the docker version information
+.SS \fBwait\fP \-\- Block until a container stops, then print its exit code
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Usage: docker wait [OPTIONS] NAME
+
+Block until a container stops, then print its exit code.
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH CONTRIBUTING
+.SS Contributing to Docker
+.sp
+Want to hack on Docker? Awesome! The repository includes \fI\%all the instructions you need to get started\fP.
+.SS Setting Up a Dev Environment
+.sp
+To make it easier to contribute to Docker, we provide a standard development environment. It is important that
+the same environment be used for all tests, builds and releases. The standard development environment defines
+all build dependencies: system libraries and binaries, go environment, go dependencies, etc.
+.SS Step 1: install docker
+.sp
+Docker\(aqs build environment itself is a docker container, so the first step is to install docker on your system.
+.sp
+You can follow the \fIinstall instructions most relevant to your system <https://docs.docker.io/en/latest/installation/>\fP.
+Make sure you have a working, up\-to\-date docker installation, then continue to the next step.
+.SS Step 2: check out the source
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+git clone http://git@github.com/dotcloud/docker
+cd docker
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Step 3: build
+.sp
+When you are ready to build docker, run this command:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+docker build \-t docker .
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+This will build the revision currently checked out in the repository. Feel free to check out the version
+of your choice.
+.sp
+If the build is successful, congratulations! You have produced a clean build of docker, neatly encapsulated
+in a standard build environment.
+.sp
+You can run an interactive session in the newly built container:
+.INDENT 0.0
+.TP
+.B ::
+docker run \-i \-t docker bash
+.UNINDENT
+.sp
+To extract the binaries from the container:
+.INDENT 0.0
+.TP
+.B ::
+docker run docker sh \-c \(aqcat $(which docker)\(aq > docker\-build && chmod +x docker\-build
+.UNINDENT
+.SH APIS
+.sp
+Your programs and scripts can access Docker\(aqs functionality via these interfaces:
+.SS Registry & index Spec
+.SS Table of Contents
 .INDENT 0.0
 .IP \(bu 2
-\fI\%IRC: docker on freenode\fP
+\fI\%Registry & index Spec\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%1. The 3 roles\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%1.1 Index\fP
+.IP \(bu 2
+\fI\%1.2 Registry\fP
+.IP \(bu 2
+\fI\%1.3 Docker\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%2. Workflow\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%2.1 Pull\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%API (pulling repository foo/bar):\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%2.2 Push\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%API (pushing repos foo/bar):\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%2.3 Delete\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%API (deleting repository foo/bar):\fP
+.UNINDENT
+.UNINDENT
+.IP \(bu 2
+\fI\%3. How to use the Registry in standalone mode\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%3.1 Without an Index\fP
+.IP \(bu 2
+\fI\%3.2 With an Index\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%4. The API\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%4.1 Images\fP
+.IP \(bu 2
+\fI\%4.2 Users\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%4.2.1 Create a user (Index)\fP
+.IP \(bu 2
+\fI\%4.2.2 Update a user (Index)\fP
+.IP \(bu 2
+\fI\%4.2.3 Login (Index)\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%4.3 Tags (Registry)\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%4.3.1 Get all tags\fP
+.IP \(bu 2
+\fI\%4.3.2 Read the content of a tag (resolve the image id)\fP
+.IP \(bu 2
+\fI\%4.3.3 Delete a tag (registry)\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%4.4 Images (Index)\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%4.4.1 Get the images\fP
+.IP \(bu 2
+\fI\%4.4.2 Add/update the images\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%4.5 Repositories\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%4.5.1 Remove a Repository (Registry)\fP
+.IP \(bu 2
+\fI\%4.5.2 Remove a Repository (Index)\fP
+.UNINDENT
+.UNINDENT
+.IP \(bu 2
+\fI\%5. Chaining Registries\fP
+.IP \(bu 2
+\fI\%6. Authentication & Authorization\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%6.1 On the Index\fP
+.IP \(bu 2
+\fI\%6.2 On the Registry\fP
+.IP \(bu 2
+\fI\%7.0 Document Version\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS 1. The 3 roles
+.SS 1.1 Index
+.sp
+The Index is responsible for centralizing information about:
+\- User accounts
+\- Checksums of the images
+\- Public namespaces
+.sp
+The Index has different components:
+\- Web UI
+\- Meta\-data store (comments, stars, list public repositories)
+\- Authentication service
+\- Tokenization
+.sp
+The index is authoritative for those information.
+.sp
+We expect that there will be only one instance of the index, run and managed by dotCloud.
+.SS 1.2 Registry
+.INDENT 0.0
+.IP \(bu 2
+It stores the images and the graph for a set of repositories
+.IP \(bu 2
+It does not have user accounts data
+.IP \(bu 2
+It has no notion of user accounts or authorization
+.IP \(bu 2
+It delegates authentication and authorization to the Index Auth service using tokens
+.IP \(bu 2
+It supports different storage backends (S3, cloud files, local FS)
+.IP \(bu 2
+It doesn’t have a local database
+.IP \(bu 2
+It will be open\-sourced at some point
+.UNINDENT
+.sp
+We expect that there will be multiple registries out there. To help to grasp the context, here are some examples of registries:
+.INDENT 0.0
+.IP \(bu 2
+\fBsponsor registry\fP: such a registry is provided by a third\-party hosting infrastructure as a convenience for their customers and the docker community as a whole. Its costs are supported by the third party, but the management and operation of the registry are supported by dotCloud. It features read/write access, and delegates authentication and authorization to the Index.
+.IP \(bu 2
+\fBmirror registry\fP: such a registry is provided by a third\-party hosting infrastructure but is targeted at their customers only. Some mechanism (unspecified to date) ensures that public images are pulled from a sponsor registry to the mirror registry, to make sure that the customers of the third\-party provider can “docker pull” those images locally.
+.IP \(bu 2
+\fBvendor registry\fP: such a registry is provided by a software vendor, who wants to distribute docker images. It would be operated and managed by the vendor. Only users authorized by the vendor would be able to get write access. Some images would be public (accessible for anyone), others private (accessible only for authorized users). Authentication and authorization would be delegated to the Index. The goal of vendor registries is to let someone do “docker pull basho/riak1.3” and automatically push from the vendor registry (instead of a sponsor registry); i.e. get all the convenience of a sponsor registry, while retaining control on the asset distribution.
+.IP \(bu 2
+\fBprivate registry\fP: such a registry is located behind a firewall, or protected by an additional security layer (HTTP authorization, SSL client\-side certificates, IP address authorization...). The registry is operated by a private entity, outside of dotCloud’s control. It can optionally delegate additional authorization to the Index, but it is not mandatory.
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+Mirror registries and private registries which do not use the Index don’t even need to run the registry code. They can be implemented by any kind of transport implementing HTTP GET and PUT. Read\-only registries can be powered by a simple static HTTP server.
+.UNINDENT
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B The latter implies that while HTTP is the protocol of choice for a registry, multiple schemes are possible (and in some cases, trivial):
+.INDENT 7.0
+.IP \(bu 2
+HTTP with GET (and PUT for read\-write registries);
+.IP \(bu 2
+local mount point;
+.IP \(bu 2
+remote docker addressed through SSH.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+The latter would only require two new commands in docker, e.g. “registryget” and “registryput”, wrapping access to the local filesystem (and optionally doing consistency checks). Authentication and authorization are then delegated to SSH (e.g. with public keys).
+.SS 1.3 Docker
+.sp
+On top of being a runtime for LXC, Docker is the Registry client. It supports:
+\- Push / Pull on the registry
+\- Client authentication on the Index
+.SS 2. Workflow
+.SS 2.1 Pull
+[image]
+.INDENT 0.0
+.IP 1. 3
+Contact the Index to know where I should download “samalba/busybox”
+.IP 2. 3
+Index replies:
+a. “samalba/busybox” is on Registry A
+b. here are the checksums for “samalba/busybox” (for all layers)
+c. token
+.IP 3. 3
+Contact Registry A to receive the layers for “samalba/busybox” (all of them to the base image). Registry A is authoritative for “samalba/busybox” but keeps a copy of all inherited layers and serve them all from the same location.
+.IP 4. 3
+registry contacts index to verify if token/user is allowed to download images
+.IP 5. 3
+Index returns true/false lettings registry know if it should proceed or error out
+.IP 6. 3
+Get the payload for all layers
+.UNINDENT
+.sp
+It’s possible to run docker pull https://<registry>/repositories/samalba/busybox. In this case, docker bypasses the Index. However the security is not guaranteed (in case Registry A is corrupted) because there won’t be any checksum checks.
+.sp
+Currently registry redirects to s3 urls for downloads, going forward all downloads need to be streamed through the registry. The Registry will then abstract the calls to S3 by a top\-level class which implements sub\-classes for S3 and local storage.
+.sp
+Token is only returned when the \(aqX\-Docker\-Token\(aq header is sent with request.
+.sp
+Basic Auth is required to pull private repos. Basic auth isn\(aqt required for pulling public repos, but if one is provided, it needs to be valid and for an active account.
+.SS API (pulling repository foo/bar):
+.INDENT 0.0
+.IP 1. 3
+.INDENT 3.0
+.TP
+.B (Docker \-> Index) GET /v1/repositories/foo/bar/images
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+X\-Docker\-Token: true
+.TP
+.B \fBAction\fP:
+(looking up the foo/bar in db and gets images and checksums for that repo (all if no tag is specified, if tag, only checksums for those tags) see part 4.4.1)
+.UNINDENT
+.UNINDENT
+.IP 2. 3
+(Index \-> Docker) HTTP 200 OK
+.INDENT 3.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBHeaders\fP:
+.INDENT 7.0
+.IP \(bu 2
+Authorization: Token signature=123abc,repository=”foo/bar”,access=write
+.IP \(bu 2
+X\-Docker\-Endpoints: registry.docker.io [, registry2.docker.io]
+.UNINDENT
+.TP
+.B \fBBody\fP:
+Jsonified checksums (see part 4.4.1)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.IP 3. 3
+.INDENT 3.0
+.TP
+.B (Docker \-> Registry) GET /v1/repositories/foo/bar/tags/latest
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+Authorization: Token signature=123abc,repository=”foo/bar”,access=write
+.UNINDENT
+.UNINDENT
+.IP 4. 3
+(Registry \-> Index) GET /v1/repositories/foo/bar/images
+.INDENT 3.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBHeaders\fP:
+Authorization: Token signature=123abc,repository=”foo/bar”,access=read
+.TP
+.B \fBBody\fP:
+<ids and checksums in payload>
+.TP
+.B \fBAction\fP:
+( Lookup token see if they have access to pull.)
+.INDENT 7.0
+.TP
+.B If good:
+HTTP 200 OK
+Index will invalidate the token
+.TP
+.B If bad:
+HTTP 401 Unauthorized
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.IP 5. 3
+.INDENT 3.0
+.TP
+.B (Docker \-> Registry) GET /v1/images/928374982374/ancestry
+.INDENT 7.0
+.TP
+.B \fBAction\fP:
+(for each image id returned in the registry, fetch /json + /layer)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+If someone makes a second request, then we will always give a new token, never reuse tokens.
+.UNINDENT
+.UNINDENT
+.SS 2.2 Push
+[image]
+.INDENT 0.0
+.IP 1. 3
+Contact the index to allocate the repository name “samalba/busybox” (authentication required with user credentials)
+.IP 2. 3
+If authentication works and namespace available, “samalba/busybox” is allocated and a temporary token is returned (namespace is marked as initialized in index)
+.IP 3. 3
+Push the image on the registry (along with the token)
+.IP 4. 3
+Registry A contacts the Index to verify the token (token must corresponds to the repository name)
+.IP 5. 3
+Index validates the token. Registry A starts reading the stream pushed by docker and store the repository (with its images)
+.IP 6. 3
+docker contacts the index to give checksums for upload images
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+\fBIt’s possible not to use the Index at all!\fP In this case, a deployed version of the Registry is deployed to store and serve images. Those images are not authentified and the security is not guaranteed.
+.UNINDENT
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+\fBIndex can be replaced!\fP For a private Registry deployed, a custom Index can be used to serve and validate token according to different policies.
+.UNINDENT
+.UNINDENT
+.sp
+Docker computes the checksums and submit them to the Index at the end of the push. When a repository name does not have checksums on the Index, it means that the push is in progress (since checksums are submitted at the end).
+.SS API (pushing repos foo/bar):
+.INDENT 0.0
+.IP 1. 4
+.INDENT 4.0
+.TP
+.B (Docker \-> Index) PUT /v1/repositories/foo/bar/
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+Authorization: Basic sdkjfskdjfhsdkjfh==
+X\-Docker\-Token: true
+.TP
+.B \fBAction\fP::
+.INDENT 7.0
+.IP \(bu 2
+in index, we allocated a new repository, and set to initialized
+.UNINDENT
+.TP
+.B \fBBody\fP::
+(The body contains the list of images that are going to be pushed, with empty checksums. The checksums will be set at the end of the push):
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+[{“id”: “9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f”}]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.IP 2. 4
+.INDENT 4.0
+.TP
+.B (Index \-> Docker) 200 Created
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+.INDENT 7.0
+.IP \(bu 2
+WWW\-Authenticate: Token signature=123abc,repository=”foo/bar”,access=write
+.IP \(bu 2
+X\-Docker\-Endpoints: registry.docker.io [, registry2.docker.io]
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.IP 3. 4
+.INDENT 4.0
+.TP
+.B (Docker \-> Registry) PUT /v1/images/98765432_parent/json
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+Authorization: Token signature=123abc,repository=”foo/bar”,access=write
+.UNINDENT
+.UNINDENT
+.IP 4. 4
+.INDENT 4.0
+.TP
+.B (Registry\->Index) GET /v1/repositories/foo/bar/images
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+Authorization: Token signature=123abc,repository=”foo/bar”,access=write
+.TP
+.B \fBAction\fP::
+.INDENT 7.0
+.IP \(bu 2
+.INDENT 4.0
+.TP
+.B Index:
+will invalidate the token.
+.UNINDENT
+.IP \(bu 2
+.INDENT 4.0
+.TP
+.B Registry:
+grants a session (if token is approved) and fetches the images id
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.IP 5. 4
+.INDENT 4.0
+.TP
+.B (Docker \-> Registry) PUT /v1/images/98765432_parent/json
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP::
+.INDENT 7.0
+.IP \(bu 2
+Authorization: Token signature=123abc,repository=”foo/bar”,access=write
+.IP \(bu 2
+Cookie: (Cookie provided by the Registry)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.IP 6. 4
+.INDENT 4.0
+.TP
+.B (Docker \-> Registry) PUT /v1/images/98765432/json
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+Cookie: (Cookie provided by the Registry)
+.UNINDENT
+.UNINDENT
+.IP 7. 4
+.INDENT 4.0
+.TP
+.B (Docker \-> Registry) PUT /v1/images/98765432_parent/layer
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+Cookie: (Cookie provided by the Registry)
+.UNINDENT
+.UNINDENT
+.IP 8. 4
+.INDENT 4.0
+.TP
+.B (Docker \-> Registry) PUT /v1/images/98765432/layer
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+X\-Docker\-Checksum: sha256:436745873465fdjkhdfjkgh
+.UNINDENT
+.UNINDENT
+.IP 9. 4
+.INDENT 4.0
+.TP
+.B (Docker \-> Registry) PUT /v1/repositories/foo/bar/tags/latest
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+Cookie: (Cookie provided by the Registry)
+.TP
+.B \fBBody\fP:
+“98765432”
+.UNINDENT
+.UNINDENT
+.IP 10. 4
+(Docker \-> Index) PUT /v1/repositories/foo/bar/images
+.INDENT 4.0
+.TP
+.B \fBHeaders\fP:
+Authorization: Basic 123oislifjsldfj==
+X\-Docker\-Endpoints: registry1.docker.io (no validation on this right now)
+.TP
+.B \fBBody\fP:
+(The image, id’s, tags and checksums)
+.sp
+[{“id”: “9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f”,
+“checksum”: “b486531f9a779a0c17e3ed29dae8f12c4f9e89cc6f0bc3c38722009fe6857087”}]
+.UNINDENT
+.sp
+\fBReturn\fP HTTP 204
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+If push fails and they need to start again, what happens in the index, there will already be a record for the namespace/name, but it will be initialized. Should we allow it, or mark as name already used? One edge case could be if someone pushes the same thing at the same time with two different shells.
+.sp
+If it\(aqs a retry on the Registry, Docker has a cookie (provided by the registry after token validation). So the Index won’t have to provide a new token.
+.UNINDENT
+.UNINDENT
+.SS 2.3 Delete
+.sp
+If you need to delete something from the index or registry, we need a nice clean way to do that. Here is the workflow.
+.INDENT 0.0
+.IP 1. 3
+Docker contacts the index to request a delete of a repository “samalba/busybox” (authentication required with user credentials)
+.IP 2. 3
+If authentication works and repository is valid, “samalba/busybox” is marked as deleted and a temporary token is returned
+.IP 3. 3
+Send a delete request to the registry for the repository (along with the token)
+.IP 4. 3
+Registry A contacts the Index to verify the token (token must corresponds to the repository name)
+.IP 5. 3
+Index validates the token. Registry A deletes the repository and everything associated to it.
+.IP 6. 3
+docker contacts the index to let it know it was removed from the registry, the index removes all records from the database.
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+The Docker client should present an "Are you sure?" prompt to confirm the deletion before starting the process. Once it starts it can\(aqt be undone.
+.UNINDENT
+.UNINDENT
+.SS API (deleting repository foo/bar):
+.INDENT 0.0
+.IP 1. 3
+.INDENT 3.0
+.TP
+.B (Docker \-> Index) DELETE /v1/repositories/foo/bar/
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+Authorization: Basic sdkjfskdjfhsdkjfh==
+X\-Docker\-Token: true
+.TP
+.B \fBAction\fP::
+.INDENT 7.0
+.IP \(bu 2
+in index, we make sure it is a valid repository, and set to deleted (logically)
+.UNINDENT
+.TP
+.B \fBBody\fP::
+Empty
+.UNINDENT
+.UNINDENT
+.IP 2. 3
+.INDENT 3.0
+.TP
+.B (Index \-> Docker) 202 Accepted
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+.INDENT 7.0
+.IP \(bu 2
+WWW\-Authenticate: Token signature=123abc,repository=”foo/bar”,access=delete
+.IP \(bu 2
+X\-Docker\-Endpoints: registry.docker.io [, registry2.docker.io]   # list of endpoints where this repo lives.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.IP 3. 3
+.INDENT 3.0
+.TP
+.B (Docker \-> Registry) DELETE /v1/repositories/foo/bar/
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+Authorization: Token signature=123abc,repository=”foo/bar”,access=delete
+.UNINDENT
+.UNINDENT
+.IP 4. 3
+.INDENT 3.0
+.TP
+.B (Registry\->Index) PUT /v1/repositories/foo/bar/auth
+.INDENT 7.0
+.TP
+.B \fBHeaders\fP:
+Authorization: Token signature=123abc,repository=”foo/bar”,access=delete
+.TP
+.B \fBAction\fP::
+.INDENT 7.0
+.IP \(bu 2
+.INDENT 3.0
+.TP
+.B Index:
+will invalidate the token.
+.UNINDENT
+.IP \(bu 2
+.INDENT 3.0
+.TP
+.B Registry:
+deletes the repository (if token is approved)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.IP 5. 3
+.INDENT 3.0
+.TP
+.B (Registry \-> Docker) 200 OK
+200 If success
+403 if forbidden
+400 if bad request
+404 if repository isn\(aqt found
+.UNINDENT
+.IP 6. 3
+(Docker \-> Index) DELETE /v1/repositories/foo/bar/
+.INDENT 3.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBHeaders\fP:
+Authorization: Basic 123oislifjsldfj==
+X\-Docker\-Endpoints: registry\-1.docker.io (no validation on this right now)
+.TP
+.B \fBBody\fP:
+Empty
+.UNINDENT
+.sp
+\fBReturn\fP HTTP 200
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS 3. How to use the Registry in standalone mode
+.sp
+The Index has two main purposes (along with its fancy social features):
+.INDENT 0.0
+.IP \(bu 2
+.INDENT 2.0
+.TP
+.B Resolve short names (to avoid passing absolute URLs all the time)
+.INDENT 7.0
+.IP \(bu 2
+username/projectname \-> https://registry.docker.io/users/<username>/repositories/<projectname>/
+.IP \(bu 2
+team/projectname \-> https://registry.docker.io/team/<team>/repositories/<projectname>/
+.UNINDENT
+.UNINDENT
+.IP \(bu 2
+Authenticate a user as a repos owner (for a central referenced repository)
+.UNINDENT
+.SS 3.1 Without an Index
+.sp
+Using the Registry without the Index can be useful to store the images on a private network without having to rely on an external entity controlled by dotCloud.
+.sp
+In this case, the registry will be launched in a special mode (\-\-standalone? \-\-no\-index?). In this mode, the only thing which changes is that Registry will never contact the Index to verify a token. It will be the Registry owner responsibility to authenticate the user who pushes (or even pulls) an image using any mechanism (HTTP auth, IP based, etc...).
+.sp
+In this scenario, the Registry is responsible for the security in case of data corruption since the checksums are not delivered by a trusted entity.
+.sp
+As hinted previously, a standalone registry can also be implemented by any HTTP server handling GET/PUT requests (or even only GET requests if no write access is necessary).
+.SS 3.2 With an Index
+.sp
+The Index data needed by the Registry are simple:
+\- Serve the checksums
+\- Provide and authorize a Token
+.sp
+In the scenario of a Registry running on a private network with the need of centralizing and authorizing, it’s easy to use a custom Index.
+.sp
+The only challenge will be to tell Docker to contact (and trust) this custom Index. Docker will be configurable at some point to use a specific Index, it’ll be the private entity responsibility (basically the organization who uses Docker in a private environment) to maintain the Index and the Docker’s configuration among its consumers.
+.SS 4. The API
+.sp
+The first version of the api is available here: \fI\%https://github.com/jpetazzo/docker/blob/acd51ecea8f5d3c02b00a08176171c59442df8b3/docs/images-repositories-push-pull.md\fP
+.SS 4.1 Images
+.sp
+The format returned in the images is not defined here (for layer and json), basically because Registry stores exactly the same kind of information as Docker uses to manage them.
+.sp
+The format of ancestry is a line\-separated list of image ids, in age order. I.e. the image’s parent is on the last line, the parent of the parent on the next\-to\-last line, etc.; if the image has no parent, the file is empty.
+.sp
+GET /v1/images/<image_id>/layer
+PUT /v1/images/<image_id>/layer
+GET /v1/images/<image_id>/json
+PUT /v1/images/<image_id>/json
+GET /v1/images/<image_id>/ancestry
+PUT /v1/images/<image_id>/ancestry
+.SS 4.2 Users
+.SS 4.2.1 Create a user (Index)
+.sp
+POST /v1/users
+.INDENT 0.0
+.TP
+.B \fBBody\fP:
+{"email": "\fI\%sam@dotcloud.com\fP", "password": "toto42", "username": "foobar"\(aq}
+.TP
+.B \fBValidation\fP:
+.INDENT 7.0
+.IP \(bu 2
+\fBusername\fP : min 4 character, max 30 characters, must match the regular expression [
+.nf
+a\-z0\-9_
+.fi
+].
+.IP \(bu 2
+\fBpassword\fP: min 5 characters
+.UNINDENT
+.UNINDENT
+.sp
+\fBValid\fP: return HTTP 200
+.sp
+Errors: HTTP 400 (we should create error codes for possible errors)
+\- invalid json
+\- missing field
+\- wrong format (username, password, email, etc)
+\- forbidden name
+\- name already exists
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+A user account will be valid only if the email has been validated (a validation link is sent to the email address).
+.UNINDENT
+.UNINDENT
+.SS 4.2.2 Update a user (Index)
+.sp
+PUT /v1/users/<username>
+.INDENT 0.0
+.TP
+.B \fBBody\fP:
+{"password": "toto"}
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+We can also update email address, if they do, they will need to reverify their new email address.
+.UNINDENT
+.UNINDENT
+.SS 4.2.3 Login (Index)
+.sp
+Does nothing else but asking for a user authentication. Can be used to validate credentials. HTTP Basic Auth for now, maybe change in future.
+.sp
+GET /v1/users
+.INDENT 0.0
+.TP
+.B \fBReturn\fP:
+.INDENT 7.0
+.IP \(bu 2
+Valid: HTTP 200
+.IP \(bu 2
+Invalid login: HTTP 401
+.IP \(bu 2
+Account inactive: HTTP 403 Account is not Active
+.UNINDENT
+.UNINDENT
+.SS 4.3 Tags (Registry)
+.sp
+The Registry does not know anything about users. Even though repositories are under usernames, it’s just a namespace for the registry. Allowing us to implement organizations or different namespaces per user later, without modifying the Registry’s API.
+.sp
+The following naming restrictions apply:
+.INDENT 0.0
+.IP \(bu 2
+Namespaces must match the same regular expression as usernames (See 4.2.1.)
+.IP \(bu 2
+Repository names must match the regular expression [a\-zA\-Z0\-9\-_.]
+.UNINDENT
+.SS 4.3.1 Get all tags
+.sp
+GET /v1/repositories/<namespace>/<repository_name>/tags
+.INDENT 0.0
+.TP
+.B \fBReturn\fP: HTTP 200
+{
+"latest": "9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f",
+“0.1.1”:  “b486531f9a779a0c17e3ed29dae8f12c4f9e89cc6f0bc3c38722009fe6857087”
+}
+.UNINDENT
+.SS 4.3.2 Read the content of a tag (resolve the image id)
+.sp
+GET /v1/repositories/<namespace>/<repo_name>/tags/<tag>
+.INDENT 0.0
+.TP
+.B \fBReturn\fP:
+"9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f"
+.UNINDENT
+.SS 4.3.3 Delete a tag (registry)
+.sp
+DELETE /v1/repositories/<namespace>/<repo_name>/tags/<tag>
+.SS 4.4 Images (Index)
+.sp
+For the Index to “resolve” the repository name to a Registry location, it uses the X\-Docker\-Endpoints header. In other terms, this requests always add a “X\-Docker\-Endpoints” to indicate the location of the registry which hosts this repository.
+.SS 4.4.1 Get the images
+.sp
+GET /v1/repositories/<namespace>/<repo_name>/images
+.INDENT 0.0
+.TP
+.B \fBReturn\fP: HTTP 200
+[{“id”: “9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f”, “checksum”: “\fI\%md5:b486531f9a779a0c17e3ed29dae8f12c4f9e89cc6f0bc3c38722009fe6857087\fP”}]
+.UNINDENT
+.SS 4.4.2 Add/update the images
+.sp
+You always add images, you never remove them.
+.sp
+PUT /v1/repositories/<namespace>/<repo_name>/images
+.INDENT 0.0
+.TP
+.B \fBBody\fP:
+[ {“id”: “9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f”, “checksum”: “sha256:b486531f9a779a0c17e3ed29dae8f12c4f9e89cc6f0bc3c38722009fe6857087”} ]
+.UNINDENT
+.sp
+\fBReturn\fP 204
+.SS 4.5 Repositories
+.SS 4.5.1 Remove a Repository (Registry)
+.sp
+DELETE /v1/repositories/<namespace>/<repo_name>
+.sp
+Return 200 OK
+.SS 4.5.2 Remove a Repository (Index)
+.sp
+This starts the delete process. see 2.3 for more details.
+.sp
+DELETE /v1/repositories/<namespace>/<repo_name>
+.sp
+Return 202 OK
+.SS 5. Chaining Registries
+.sp
+It’s possible to chain Registries server for several reasons:
+\- Load balancing
+\- Delegate the next request to another server
+.sp
+When a Registry is a reference for a repository, it should host the entire images chain in order to avoid breaking the chain during the download.
+.sp
+The Index and Registry use this mechanism to redirect on one or the other.
+.sp
+Example with an image download:
+On every request, a special header can be returned:
+.sp
+X\-Docker\-Endpoints: server1,server2
+.sp
+On the next request, the client will always pick a server from this list.
+.SS 6. Authentication & Authorization
+.SS 6.1 On the Index
+.sp
+The Index supports both “Basic” and “Token” challenges. Usually when there is a “401 Unauthorized”, the Index replies this:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+401 Unauthorized
+WWW\-Authenticate: Basic realm="auth required",Token
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+You have 3 options:
+.INDENT 0.0
+.IP 1. 3
+Provide user credentials and ask for a token
+.INDENT 3.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBHeader\fP:
+.INDENT 7.0
+.IP \(bu 2
+Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+.IP \(bu 2
+X\-Docker\-Token: true
+.UNINDENT
+.UNINDENT
+.sp
+In this case, along with the 200 response, you’ll get a new token (if user auth is ok):
+If authorization isn\(aqt correct you get a 401 response.
+If account isn\(aqt active you will get a 403 response.
+.INDENT 0.0
+.TP
+.B \fBResponse\fP:
+.INDENT 7.0
+.IP \(bu 2
+200 OK
+.IP \(bu 2
+X\-Docker\-Token: Token signature=123abc,repository=”foo/bar”,access=read
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.IP 2. 3
+Provide user credentials only
+.INDENT 3.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBHeader\fP:
+Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.IP 3. 3
+Provide Token
+.INDENT 3.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fBHeader\fP:
+Authorization: Token signature=123abc,repository=”foo/bar”,access=read
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS 6.2 On the Registry
+.sp
+The Registry only supports the Token challenge:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+401 Unauthorized
+WWW\-Authenticate: Token
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The only way is to provide a token on “401 Unauthorized” responses:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Authorization: Token signature=123abc,repository=”foo/bar”,access=read
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Usually, the Registry provides a Cookie when a Token verification succeeded. Every time the Registry passes a Cookie, you have to pass it back the same cookie.:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+200 OK
+Set\-Cookie: session="wD/J7LqL5ctqw8haL10vgfhrb2Q=?foo=UydiYXInCnAxCi4=&timestamp=RjEzNjYzMTQ5NDcuNDc0NjQzCi4="; Path=/; HttpOnly
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Next request:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GET /(...)
+Cookie: session="wD/J7LqL5ctqw8haL10vgfhrb2Q=?foo=UydiYXInCnAxCi4=&timestamp=RjEzNjYzMTQ5NDcuNDc0NjQzCi4="
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS 7.0 Document Version
+.INDENT 0.0
+.IP \(bu 2
+1.0 : May 6th 2013 : initial release
+.IP \(bu 2
+1.1 : June 1st 2013 : Added Delete Repository and way to handle new source namespace.
+.UNINDENT
+.SS Docker Registry API
+.SS Table of Contents
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Docker Registry API\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%1. Brief introduction\fP
+.IP \(bu 2
+\fI\%2. Endpoints\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%2.1 Images\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%Layer\fP
+.IP \(bu 2
+\fI\%Image\fP
+.IP \(bu 2
+\fI\%Ancestry\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%2.2 Tags\fP
+.IP \(bu 2
+\fI\%2.3 Repositories\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%3.0 Authorization\fP
+.UNINDENT
+.UNINDENT
+.SS 1. Brief introduction
+.INDENT 0.0
+.IP \(bu 2
+This is the REST API for the Docker Registry
+.IP \(bu 2
+It stores the images and the graph for a set of repositories
+.IP \(bu 2
+It does not have user accounts data
+.IP \(bu 2
+It has no notion of user accounts or authorization
+.IP \(bu 2
+It delegates authentication and authorization to the Index Auth service using tokens
+.IP \(bu 2
+It supports different storage backends (S3, cloud files, local FS)
+.IP \(bu 2
+It doesn’t have a local database
+.IP \(bu 2
+It will be open\-sourced at some point
+.UNINDENT
+.sp
+We expect that there will be multiple registries out there. To help to grasp the context, here are some examples of registries:
+.INDENT 0.0
+.IP \(bu 2
+\fBsponsor registry\fP: such a registry is provided by a third\-party hosting infrastructure as a convenience for their customers and the docker community as a whole. Its costs are supported by the third party, but the management and operation of the registry are supported by dotCloud. It features read/write access, and delegates authentication and authorization to the Index.
+.IP \(bu 2
+\fBmirror registry\fP: such a registry is provided by a third\-party hosting infrastructure but is targeted at their customers only. Some mechanism (unspecified to date) ensures that public images are pulled from a sponsor registry to the mirror registry, to make sure that the customers of the third\-party provider can “docker pull” those images locally.
+.IP \(bu 2
+\fBvendor registry\fP: such a registry is provided by a software vendor, who wants to distribute docker images. It would be operated and managed by the vendor. Only users authorized by the vendor would be able to get write access. Some images would be public (accessible for anyone), others private (accessible only for authorized users). Authentication and authorization would be delegated to the Index. The goal of vendor registries is to let someone do “docker pull basho/riak1.3” and automatically push from the vendor registry (instead of a sponsor registry); i.e. get all the convenience of a sponsor registry, while retaining control on the asset distribution.
+.IP \(bu 2
+\fBprivate registry\fP: such a registry is located behind a firewall, or protected by an additional security layer (HTTP authorization, SSL client\-side certificates, IP address authorization...). The registry is operated by a private entity, outside of dotCloud’s control. It can optionally delegate additional authorization to the Index, but it is not mandatory.
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+Mirror registries and private registries which do not use the Index don’t even need to run the registry code. They can be implemented by any kind of transport implementing HTTP GET and PUT. Read\-only registries can be powered by a simple static HTTP server.
+.UNINDENT
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B The latter implies that while HTTP is the protocol of choice for a registry, multiple schemes are possible (and in some cases, trivial):
+.INDENT 7.0
+.IP \(bu 2
+HTTP with GET (and PUT for read\-write registries);
+.IP \(bu 2
+local mount point;
+.IP \(bu 2
+remote docker addressed through SSH.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+The latter would only require two new commands in docker, e.g. “registryget” and “registryput”, wrapping access to the local filesystem (and optionally doing consistency checks). Authentication and authorization are then delegated to SSH (e.g. with public keys).
+.SS 2. Endpoints
+.SS 2.1 Images
+.SS Layer
+.INDENT 0.0
+.TP
+.B GET /v1/images/(image_id)/layer
+get image layer for a given \fBimage_id\fP
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GET /v1/images/088b4505aa3adc3d35e79c031fa126b403200f02f51920fbd9b7c503e87c7a2c/layer HTTP/1.1
+Host: registry\-1.docker.io
+Accept: application/json
+Content\-Type: application/json
+Authorization: Token akmklmasadalkmsdfgsdgdge33
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBimage_id\fP \-\- the id for the layer you want to get
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+Cookie: (Cookie provided by the Registry)
+
+{
+    id: "088b4505aa3adc3d35e79c031fa126b403200f02f51920fbd9b7c503e87c7a2c",
+    parent: "aeee6396d62273d180a49c96c62e45438d87c7da4a5cf5d2be6bee4e21bc226f",
+    created: "2013\-04\-30T17:46:10.843673+03:00",
+    container: "8305672a76cc5e3d168f97221106ced35a76ec7ddbb03209b0f0d96bf74f6ef7",
+    container_config: {
+        Hostname: "host\-test",
+        User: "",
+        Memory: 0,
+        MemorySwap: 0,
+        AttachStdin: false,
+        AttachStdout: false,
+        AttachStderr: false,
+        PortSpecs: null,
+        Tty: false,
+        OpenStdin: false,
+        StdinOnce: false,
+        Env: null,
+        Cmd: [
+        "/bin/bash",
+        "\-c",
+        "apt\-get \-q \-yy \-f install libevent\-dev"
+        ],
+        Dns: null,
+        Image: "imagename/blah",
+        Volumes: { },
+        VolumesFrom: ""
+    },
+    docker_version: "0.1.7"
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB401\fP \-\- Requires authorization
+.IP \(bu 2
+\fB404\fP \-\- Image not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B PUT /v1/images/(image_id)/layer
+put image layer for a given \fBimage_id\fP
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+PUT /v1/images/088b4505aa3adc3d35e79c031fa126b403200f02f51920fbd9b7c503e87c7a2c/layer HTTP/1.1
+Host: registry\-1.docker.io
+Accept: application/json
+Content\-Type: application/json
+Authorization: Token akmklmasadalkmsdfgsdgdge33
+
+{
+    id: "088b4505aa3adc3d35e79c031fa126b403200f02f51920fbd9b7c503e87c7a2c",
+    parent: "aeee6396d62273d180a49c96c62e45438d87c7da4a5cf5d2be6bee4e21bc226f",
+    created: "2013\-04\-30T17:46:10.843673+03:00",
+    container: "8305672a76cc5e3d168f97221106ced35a76ec7ddbb03209b0f0d96bf74f6ef7",
+    container_config: {
+        Hostname: "host\-test",
+        User: "",
+        Memory: 0,
+        MemorySwap: 0,
+        AttachStdin: false,
+        AttachStdout: false,
+        AttachStderr: false,
+        PortSpecs: null,
+        Tty: false,
+        OpenStdin: false,
+        StdinOnce: false,
+        Env: null,
+        Cmd: [
+        "/bin/bash",
+        "\-c",
+        "apt\-get \-q \-yy \-f install libevent\-dev"
+        ],
+        Dns: null,
+        Image: "imagename/blah",
+        Volumes: { },
+        VolumesFrom: ""
+    },
+    docker_version: "0.1.7"
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBimage_id\fP \-\- the id for the layer you want to get
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB401\fP \-\- Requires authorization
+.IP \(bu 2
+\fB404\fP \-\- Image not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Image
+.INDENT 0.0
+.TP
+.B PUT /v1/images/(image_id)/json
+put image for a given \fBimage_id\fP
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+PUT /v1/images/088b4505aa3adc3d35e79c031fa126b403200f02f51920fbd9b7c503e87c7a2c/json HTTP/1.1
+Host: registry\-1.docker.io
+Accept: application/json
+Content\-Type: application/json
+Cookie: (Cookie provided by the Registry)
+
+{
+ “id”: “088b4505aa3adc3d35e79c031fa126b403200f02f51920fbd9b7c503e87c7a2c”,
+ “checksum”:  “sha256:b486531f9a779a0c17e3ed29dae8f12c4f9e89cc6f0bc3c38722009fe6857087”
+ }
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBimage_id\fP \-\- the id for the layer you want to get
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB401\fP \-\- Requires authorization
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B GET /v1/images/(image_id)/json
+get image for a given \fBimage_id\fP
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GET /v1/images/088b4505aa3adc3d35e79c031fa126b403200f02f51920fbd9b7c503e87c7a2c/json HTTP/1.1
+Host: registry\-1.docker.io
+Accept: application/json
+Content\-Type: application/json
+Cookie: (Cookie provided by the Registry)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBimage_id\fP \-\- the id for the layer you want to get
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+{
+ “id”: “088b4505aa3adc3d35e79c031fa126b403200f02f51920fbd9b7c503e87c7a2c”,
+ “checksum”:  “sha256:b486531f9a779a0c17e3ed29dae8f12c4f9e89cc6f0bc3c38722009fe6857087”
+ }
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB401\fP \-\- Requires authorization
+.IP \(bu 2
+\fB404\fP \-\- Image not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Ancestry
+.INDENT 0.0
+.TP
+.B GET /v1/images/(image_id)/ancestry
+get ancestry for an image given an \fBimage_id\fP
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GET /v1/images/088b4505aa3adc3d35e79c031fa126b403200f02f51920fbd9b7c503e87c7a2c/ancestry HTTP/1.1
+Host: registry\-1.docker.io
+Accept: application/json
+Content\-Type: application/json
+Cookie: (Cookie provided by the Registry)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBimage_id\fP \-\- the id for the layer you want to get
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+["088b4502f51920fbd9b7c503e87c7a2c05aa3adc3d35e79c031fa126b403200f",
+ "aeee63968d87c7da4a5cf5d2be6bee4e21bc226fd62273d180a49c96c62e4543",
+ "bfa4c5326bc764280b0863b46a4b20d940bc1897ef9c1dfec060604bdc383280",
+ "6ab5893c6927c15a15665191f2c6cf751f5056d8b95ceee32e43c5e8a3648544"]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB401\fP \-\- Requires authorization
+.IP \(bu 2
+\fB404\fP \-\- Image not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS 2.2 Tags
+.INDENT 0.0
+.TP
+.B GET /v1/repositories/(namespace)/(repository)/tags
+get all of the tags for the given repo.
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GET /v1/repositories/foo/bar/tags HTTP/1.1
+Host: registry\-1.docker.io
+Accept: application/json
+Content\-Type: application/json
+Cookie: (Cookie provided by the Registry)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnamespace\fP \-\- namespace for the repo
+.IP \(bu 2
+\fBrepository\fP \-\- name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+{
+    "latest": "9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f",
+    “0.1.1”:  “b486531f9a779a0c17e3ed29dae8f12c4f9e89cc6f0bc3c38722009fe6857087”
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB401\fP \-\- Requires authorization
+.IP \(bu 2
+\fB404\fP \-\- Repository not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B GET /v1/repositories/(namespace)/(repository)/tags/(tag)
+get a tag for the given repo.
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GET /v1/repositories/foo/bar/tags/latest HTTP/1.1
+Host: registry\-1.docker.io
+Accept: application/json
+Content\-Type: application/json
+Cookie: (Cookie provided by the Registry)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnamespace\fP \-\- namespace for the repo
+.IP \(bu 2
+\fBrepository\fP \-\- name for the repo
+.IP \(bu 2
+\fBtag\fP \-\- name of tag you want to get
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+"9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f"
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB401\fP \-\- Requires authorization
+.IP \(bu 2
+\fB404\fP \-\- Tag not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B DELETE /v1/repositories/(namespace)/(repository)/tags/(tag)
+delete the tag for the repo
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+DELETE /v1/repositories/foo/bar/tags/latest HTTP/1.1
+Host: registry\-1.docker.io
+Accept: application/json
+Content\-Type: application/json
+Cookie: (Cookie provided by the Registry)
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnamespace\fP \-\- namespace for the repo
+.IP \(bu 2
+\fBrepository\fP \-\- name for the repo
+.IP \(bu 2
+\fBtag\fP \-\- name of tag you want to delete
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB401\fP \-\- Requires authorization
+.IP \(bu 2
+\fB404\fP \-\- Tag not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B PUT /v1/repositories/(namespace)/(repository)/tags/(tag)
+put a tag for the given repo.
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+PUT /v1/repositories/foo/bar/tags/latest HTTP/1.1
+Host: registry\-1.docker.io
+Accept: application/json
+Content\-Type: application/json
+Cookie: (Cookie provided by the Registry)
+
+“9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f”
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnamespace\fP \-\- namespace for the repo
+.IP \(bu 2
+\fBrepository\fP \-\- name for the repo
+.IP \(bu 2
+\fBtag\fP \-\- name of tag you want to add
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB400\fP \-\- Invalid data
+.IP \(bu 2
+\fB401\fP \-\- Requires authorization
+.IP \(bu 2
+\fB404\fP \-\- Image not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS 2.3 Repositories
+.INDENT 0.0
+.TP
+.B DELETE /v1/repositories/(namespace)/(repository)/
+delete a repository
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+DELETE /v1/repositories/foo/bar/ HTTP/1.1
+Host: registry\-1.docker.io
+Accept: application/json
+Content\-Type: application/json
+Cookie: (Cookie provided by the Registry)
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnamespace\fP \-\- namespace for the repo
+.IP \(bu 2
+\fBrepository\fP \-\- name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB401\fP \-\- Requires authorization
+.IP \(bu 2
+\fB404\fP \-\- Repository not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS 3.0 Authorization
+.sp
+This is where we describe the authorization process, including the tokens and cookies.
+.sp
+TODO: add more info.
+.SS Docker Index API
+.SS Table of Contents
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Docker Index API\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%1. Brief introduction\fP
+.IP \(bu 2
+\fI\%2. Endpoints\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%2.1 Repository\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%Repositories\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%User Repo\fP
+.IP \(bu 2
+\fI\%Library Repo\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%Repository Images\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%User Repo Images\fP
+.IP \(bu 2
+\fI\%Library Repo Images\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%Repository Authorization\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%Library Repo\fP
+.IP \(bu 2
+\fI\%User Repo\fP
+.UNINDENT
+.UNINDENT
+.IP \(bu 2
+\fI\%2.2 Users\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%User Login\fP
+.IP \(bu 2
+\fI\%User Register\fP
+.IP \(bu 2
+\fI\%Update User\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%2.3 Search\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%Search\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS 1. Brief introduction
+.INDENT 0.0
+.IP \(bu 2
+This is the REST API for the Docker index
+.IP \(bu 2
+Authorization is done with basic auth over SSL
+.IP \(bu 2
+Not all commands require authentication, only those noted as such.
+.UNINDENT
+.SS 2. Endpoints
+.SS 2.1 Repository
+.SS Repositories
+.SS User Repo
+.INDENT 0.0
+.TP
+.B PUT /v1/repositories/(namespace)/(repo_name)/
+Create a user repository with the given \fBnamespace\fP and \fBrepo_name\fP.
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+PUT /v1/repositories/foo/bar/ HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+Content\-Type: application/json
+Authorization: Basic akmklmasadalkm==
+X\-Docker\-Token: true
+
+[{“id”: “9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f”}]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnamespace\fP \-\- the namespace for the repo
+.IP \(bu 2
+\fBrepo_name\fP \-\- the name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+WWW\-Authenticate: Token signature=123abc,repository=”foo/bar”,access=write
+X\-Docker\-Endpoints: registry\-1.docker.io [, registry\-2.docker.io]
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- Created
+.IP \(bu 2
+\fB400\fP \-\- Errors (invalid json, missing or invalid fields, etc)
+.IP \(bu 2
+\fB401\fP \-\- Unauthorized
+.IP \(bu 2
+\fB403\fP \-\- Account is not Active
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B DELETE /v1/repositories/(namespace)/(repo_name)/
+Delete a user repository with the given \fBnamespace\fP and \fBrepo_name\fP.
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+DELETE /v1/repositories/foo/bar/ HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+Content\-Type: application/json
+Authorization: Basic akmklmasadalkm==
+X\-Docker\-Token: true
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnamespace\fP \-\- the namespace for the repo
+.IP \(bu 2
+\fBrepo_name\fP \-\- the name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 202
+Vary: Accept
+Content\-Type: application/json
+WWW\-Authenticate: Token signature=123abc,repository=”foo/bar”,access=delete
+X\-Docker\-Endpoints: registry\-1.docker.io [, registry\-2.docker.io]
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- Deleted
+.IP \(bu 2
+\fB202\fP \-\- Accepted
+.IP \(bu 2
+\fB400\fP \-\- Errors (invalid json, missing or invalid fields, etc)
+.IP \(bu 2
+\fB401\fP \-\- Unauthorized
+.IP \(bu 2
+\fB403\fP \-\- Account is not Active
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Library Repo
+.INDENT 0.0
+.TP
+.B PUT /v1/repositories/(repo_name)/
+Create a library repository with the given \fBrepo_name\fP.
+This is a restricted feature only available to docker admins.
+.sp
+When namespace is missing, it is assumed to be \fBlibrary\fP
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+PUT /v1/repositories/foobar/ HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+Content\-Type: application/json
+Authorization: Basic akmklmasadalkm==
+X\-Docker\-Token: true
+
+[{“id”: “9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f”}]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBrepo_name\fP \-\- the library name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+WWW\-Authenticate: Token signature=123abc,repository=”library/foobar”,access=write
+X\-Docker\-Endpoints: registry\-1.docker.io [, registry\-2.docker.io]
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- Created
+.IP \(bu 2
+\fB400\fP \-\- Errors (invalid json, missing or invalid fields, etc)
+.IP \(bu 2
+\fB401\fP \-\- Unauthorized
+.IP \(bu 2
+\fB403\fP \-\- Account is not Active
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B DELETE /v1/repositories/(repo_name)/
+Delete a library repository with the given \fBrepo_name\fP.
+This is a restricted feature only available to docker admins.
+.sp
+When namespace is missing, it is assumed to be \fBlibrary\fP
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+DELETE /v1/repositories/foobar/ HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+Content\-Type: application/json
+Authorization: Basic akmklmasadalkm==
+X\-Docker\-Token: true
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBrepo_name\fP \-\- the library name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 202
+Vary: Accept
+Content\-Type: application/json
+WWW\-Authenticate: Token signature=123abc,repository=”library/foobar”,access=delete
+X\-Docker\-Endpoints: registry\-1.docker.io [, registry\-2.docker.io]
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- Deleted
+.IP \(bu 2
+\fB202\fP \-\- Accepted
+.IP \(bu 2
+\fB400\fP \-\- Errors (invalid json, missing or invalid fields, etc)
+.IP \(bu 2
+\fB401\fP \-\- Unauthorized
+.IP \(bu 2
+\fB403\fP \-\- Account is not Active
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Repository Images
+.SS User Repo Images
+.INDENT 0.0
+.TP
+.B PUT /v1/repositories/(namespace)/(repo_name)/images
+Update the images for a user repo.
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+PUT /v1/repositories/foo/bar/images HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+Content\-Type: application/json
+Authorization: Basic akmklmasadalkm==
+
+[{“id”: “9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f”,
+“checksum”: “b486531f9a779a0c17e3ed29dae8f12c4f9e89cc6f0bc3c38722009fe6857087”}]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnamespace\fP \-\- the namespace for the repo
+.IP \(bu 2
+\fBrepo_name\fP \-\- the name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 204
+Vary: Accept
+Content\-Type: application/json
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB204\fP \-\- Created
+.IP \(bu 2
+\fB400\fP \-\- Errors (invalid json, missing or invalid fields, etc)
+.IP \(bu 2
+\fB401\fP \-\- Unauthorized
+.IP \(bu 2
+\fB403\fP \-\- Account is not Active or permission denied
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B GET /v1/repositories/(namespace)/(repo_name)/images
+get the images for a user repo.
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GET /v1/repositories/foo/bar/images HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnamespace\fP \-\- the namespace for the repo
+.IP \(bu 2
+\fBrepo_name\fP \-\- the name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+[{“id”: “9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f”,
+“checksum”: “b486531f9a779a0c17e3ed29dae8f12c4f9e89cc6f0bc3c38722009fe6857087”},
+{“id”: “ertwetewtwe38722009fe6857087b486531f9a779a0c1dfddgfgsdgdsgds”,
+“checksum”: “34t23f23fc17e3ed29dae8f12c4f9e89cc6f0bsdfgfsdgdsgdsgerwgew”}]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB404\fP \-\- Not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Library Repo Images
+.INDENT 0.0
+.TP
+.B PUT /v1/repositories/(repo_name)/images
+Update the images for a library repo.
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+PUT /v1/repositories/foobar/images HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+Content\-Type: application/json
+Authorization: Basic akmklmasadalkm==
+
+[{“id”: “9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f”,
+“checksum”: “b486531f9a779a0c17e3ed29dae8f12c4f9e89cc6f0bc3c38722009fe6857087”}]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBrepo_name\fP \-\- the library name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 204
+Vary: Accept
+Content\-Type: application/json
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB204\fP \-\- Created
+.IP \(bu 2
+\fB400\fP \-\- Errors (invalid json, missing or invalid fields, etc)
+.IP \(bu 2
+\fB401\fP \-\- Unauthorized
+.IP \(bu 2
+\fB403\fP \-\- Account is not Active or permission denied
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B GET /v1/repositories/(repo_name)/images
+get the images for a library repo.
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GET /v1/repositories/foobar/images HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBrepo_name\fP \-\- the library name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+[{“id”: “9e89cc6f0bc3c38722009fe6857087b486531f9a779a0c17e3ed29dae8f12c4f”,
+“checksum”: “b486531f9a779a0c17e3ed29dae8f12c4f9e89cc6f0bc3c38722009fe6857087”},
+{“id”: “ertwetewtwe38722009fe6857087b486531f9a779a0c1dfddgfgsdgdsgds”,
+“checksum”: “34t23f23fc17e3ed29dae8f12c4f9e89cc6f0bsdfgfsdgdsgdsgerwgew”}]
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB404\fP \-\- Not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Repository Authorization
+.SS Library Repo
+.INDENT 0.0
+.TP
+.B PUT /v1/repositories/(repo_name)/auth
+authorize a token for a library repo
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+PUT /v1/repositories/foobar/auth HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+Authorization: Token signature=123abc,repository="library/foobar",access=write
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBrepo_name\fP \-\- the library name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+"OK"
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB403\fP \-\- Permission denied
+.IP \(bu 2
+\fB404\fP \-\- Not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS User Repo
+.INDENT 0.0
+.TP
+.B PUT /v1/repositories/(namespace)/(repo_name)/auth
+authorize a token for a user repo
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+PUT /v1/repositories/foo/bar/auth HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+Authorization: Token signature=123abc,repository="foo/bar",access=write
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBnamespace\fP \-\- the namespace for the repo
+.IP \(bu 2
+\fBrepo_name\fP \-\- the name for the repo
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200
+Vary: Accept
+Content\-Type: application/json
+
+"OK"
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- OK
+.IP \(bu 2
+\fB403\fP \-\- Permission denied
+.IP \(bu 2
+\fB404\fP \-\- Not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS 2.2 Users
+.SS User Login
+.INDENT 0.0
+.TP
+.B GET /v1/users
+If you want to check your login, you can try this endpoint
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GET /v1/users HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+Authorization: Basic akmklmasadalkm==
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200 OK
+Vary: Accept
+Content\-Type: application/json
+
+OK
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- no error
+.IP \(bu 2
+\fB401\fP \-\- Unauthorized
+.IP \(bu 2
+\fB403\fP \-\- Account is not Active
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS User Register
+.INDENT 0.0
+.TP
+.B POST /v1/users
+Registering a new account.
+.sp
+\fBExample request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+POST /v1/users HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+Content\-Type: application/json
+
+{"email": "sam@dotcloud.com",
+ "password": "toto42",
+ "username": "foobar"\(aq}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Json Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBemail\fP \-\- valid email address, that needs to be confirmed
+.IP \(bu 2
+\fBusername\fP \-\- min 4 character, max 30 characters, must match the regular expression [
+.nf
+a\-z0\-9_
+.fi
+].
+.IP \(bu 2
+\fBpassword\fP \-\- min 5 characters
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 201 OK
+Vary: Accept
+Content\-Type: application/json
+
+"User Created"
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB201\fP \-\- User Created
+.IP \(bu 2
+\fB400\fP \-\- Errors (invalid json, missing or invalid fields, etc)
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Update User
+.INDENT 0.0
+.TP
+.B PUT /v1/users/(username)/
+Change a password or email address for given user. If you pass in an email,
+it will add it to your account, it will not remove the old one. Passwords will
+be updated.
+.sp
+It is up to the client to verify that that password that is sent is the one that
+they want. Common approach is to have them type it twice.
+.sp
+\fBExample Request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+PUT /v1/users/fakeuser/ HTTP/1.1
+Host: index.docker.io
+Accept: application/json
+Content\-Type: application/json
+Authorization: Basic akmklmasadalkm==
+
+{"email": "sam@dotcloud.com",
+ "password": "toto42"}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBusername\fP \-\- username for the person you want to update
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample Response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 204
+Vary: Accept
+Content\-Type: application/json
+
+""
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB204\fP \-\- User Updated
+.IP \(bu 2
+\fB400\fP \-\- Errors (invalid json, missing or invalid fields, etc)
+.IP \(bu 2
+\fB401\fP \-\- Unauthorized
+.IP \(bu 2
+\fB403\fP \-\- Account is not Active
+.IP \(bu 2
+\fB404\fP \-\- User not found
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS 2.3 Search
+.sp
+If you need to search the index, this is the endpoint you would use.
+.SS Search
+.INDENT 0.0
+.TP
+.B GET /v1/search
+Search the Index given a search term. It accepts \fI\%GET\fP only.
+.sp
+\fBExample request\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GET /v1/search?q=search_term HTTP/1.1
+Host: example.com
+Accept: application/json
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+\fBExample response\fP:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200 OK
+Vary: Accept
+Content\-Type: application/json
+
+{"query":"search_term",
+  "num_results": 2,
+  "results" : [
+     {"name": "dotcloud/base", "description": "A base ubuntu64  image..."},
+     {"name": "base2", "description": "A base ubuntu64  image..."},
+   ]
+ }
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Query Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBq\fP \-\- what you want to search for
+.UNINDENT
+.TP
+.B Status Codes
+.INDENT 7.0
+.IP \(bu 2
+\fB200\fP \-\- no error
+.IP \(bu 2
+\fB500\fP \-\- server error
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Docker Remote API
+.SS Table of Contents
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Docker Remote API\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%1. Brief introduction\fP
+.IP \(bu 2
+\fI\%2. Versions\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%docker_remote_api_v1.3\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%What's new\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%docker_remote_api_v1.2\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%What's new\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%docker_remote_api_v1.1\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%What's new\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%docker_remote_api_v1.0\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%What's new\fP
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.IP \(bu 2
+\fI\%Docker Remote API Client Libraries\fP
+.UNINDENT
+.SS 1. Brief introduction
+.INDENT 0.0
+.IP \(bu 2
+The Remote API is replacing rcli
+.IP \(bu 2
+Default port in the docker deamon is 4243
+.IP \(bu 2
+The API tends to be REST, but for some complex commands, like attach or pull, the HTTP connection is hijacked to transport stdout stdin and stderr
+.IP \(bu 2
+Since API version 1.2, the auth configuration is now handled client side, so the client has to send the authConfig as POST in /images/(name)/push
+.UNINDENT
+.SS 2. Versions
+.sp
+The current verson of the API is 1.3
+Calling /images/<name>/insert is the same as calling /v1.3/images/<name>/insert
+You can still call an old version of the api using /v1.0/images/<name>/insert
+.SS \fBdocker_remote_api_v1.3\fP
+.SS What\(aqs new
+.sp
+Listing processes (/top):
+.INDENT 0.0
+.IP \(bu 2
+List the processes inside a container
+.UNINDENT
+.sp
+Builder (/build):
+.INDENT 0.0
+.IP \(bu 2
+Simplify the upload of the build context
+.IP \(bu 2
+Simply stream a tarball instead of multipart upload with 4 intermediary buffers
+.IP \(bu 2
+Simpler, less memory usage, less disk usage and faster
+.UNINDENT
+.sp
+The /build improvements are not reverse\-compatible. Pre 1.3 clients will break on /build.
+.sp
+List containers (/containers/json):
+.INDENT 0.0
+.IP \(bu 2
+You can use size=1 to get the size of the containers
+.UNINDENT
+.sp
+Start containers (/containers/<id>/start):
+.INDENT 0.0
+.IP \(bu 2
+You can now pass host\-specific configuration (e.g. bind mounts) in the POST body for start calls
+.UNINDENT
+.SS \fBdocker_remote_api_v1.2\fP
+.sp
+docker v0.4.2 \fI\%2e7649b\fP
+.SS What\(aqs new
+.sp
+The auth configuration is now handled by the client.
+The client should send it\(aqs authConfig as POST on each call of /images/(name)/push
+.INDENT 0.0
+.TP
+.B GET /auth is now deprecated
+.UNINDENT
+.INDENT 0.0
+.TP
+.B POST /auth only checks the configuration but doesn\(aqt store it on the server
+.UNINDENT
+.sp
+Deleting an image is now improved, will only untag the image if it has chidrens and remove all the untagged parents if has any.
+.INDENT 0.0
+.TP
+.B POST /images/<name>/delete now returns a JSON with the list of images deleted/untagged
+.UNINDENT
+.SS \fBdocker_remote_api_v1.1\fP
+.sp
+docker v0.4.0 \fI\%a8ae398\fP
+.SS What\(aqs new
+.INDENT 0.0
+.TP
+.B POST /images/create
+.UNINDENT
+.INDENT 0.0
+.TP
+.B POST /images/(name)/insert
+.UNINDENT
+.INDENT 0.0
+.TP
+.B POST /images/(name)/push
+.UNINDENT
+.sp
+Uses json stream instead of HTML hijack, it looks like this:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+HTTP/1.1 200 OK
+Content\-Type: application/json
+
+{"status":"Pushing..."}
+{"status":"Pushing", "progress":"1/? (n/a)"}
+{"error":"Invalid..."}
+\&...
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS \fBdocker_remote_api_v1.0\fP
+.sp
+docker v0.3.4 \fI\%8d73740\fP
+.SS What\(aqs new
+.sp
+Initial version
+.SS Docker Remote API Client Libraries
+.sp
+These libraries have been not tested by the Docker Maintainers for
+compatibility. Please file issues with the library owners.  If you
+find more library implementations, please list them in Docker doc bugs
+and we will add the libraries here.
+.TS
+center;
+|l|l|l|.
+_
+T{
+Language/Framework
+T}	T{
+Name
+T}	T{
+Repository
+T}
+_
+T{
+Python
+T}	T{
+docker\-py
+T}	T{
+\fI\%https://github.com/dotcloud/docker-py\fP
+T}
+_
+T{
+Ruby
+T}	T{
+docker\-ruby
+T}	T{
+\fI\%https://github.com/ActiveState/docker-ruby\fP
+T}
+_
+T{
+Ruby
+T}	T{
+docker\-client
+T}	T{
+\fI\%https://github.com/geku/docker-client\fP
+T}
+_
+T{
+Ruby
+T}	T{
+docker\-api
+T}	T{
+\fI\%https://github.com/swipely/docker-api\fP
+T}
+_
+T{
+Javascript
+T}	T{
+docker\-js
+T}	T{
+\fI\%https://github.com/dgoujard/docker-js\fP
+T}
+_
+T{
+Javascript (Angular)
+\fBWebUI\fP
+T}	T{
+dockerui
+T}	T{
+\fI\%https://github.com/crosbymichael/dockerui\fP
+T}
+_
+T{
+Java
+T}	T{
+docker\-java
+T}	T{
+\fI\%https://github.com/kpelykh/docker-java\fP
+T}
+_
+.TE
+.SH GLOSSARY
+.sp
+Definitions of terms used in Docker documentation.
+.sp
+Contents:
+.SS File System
+[image]
+.sp
+In order for a Linux system to run, it typically needs two \fI\%file
+systems\fP:
+.INDENT 0.0
+.IP 1. 3
+boot file system (bootfs)
+.IP 2. 3
+root file system (rootfs)
+.UNINDENT
+.sp
+The \fBboot file system\fP contains the bootloader and the kernel. The
+user never makes any changes to the boot file system. In fact, soon
+after the boot process is complete, the entire kernel is in memory,
+and the boot file system is unmounted to free up the RAM associated
+with the initrd disk image.
+.sp
+The \fBroot file system\fP includes the typical directory structure we
+associate with Unix\-like operating systems: \fB/dev, /proc, /bin, /etc,
+/lib, /usr,\fP and \fB/tmp\fP plus all the configuration files, binaries
+and libraries required to run user applications (like bash, ls, and so
+forth).
+.sp
+While there can be important kernel differences between different
+Linux distributions, the contents and organization of the root file
+system are usually what make your software packages dependent on one
+distribution versus another. Docker can help solve this problem by
+running multiple distributions at the same time.
+[image]
+.SS Layers
+.sp
+In a traditional Linux boot, the kernel first mounts the root
+\fIfilesystem_def\fP as read\-only, checks its integrity, and then
+switches the whole rootfs volume to read\-write mode.
+.SS Layer
+.sp
+When Docker mounts the rootfs, it starts read\-only, as in a tradtional
+Linux boot, but then, instead of changing the file system to
+read\-write mode, it takes advantage of a \fI\%union mount\fP to add a read\-write file
+system \fIover\fP the read\-only file system. In fact there may be multiple
+read\-only file systems stacked on top of each other. We think of each
+one of these file systems as a \fBlayer\fP.
+[image]
+.sp
+At first, the top read\-write layer has nothing in it, but any time a
+process creates a file, this happens in the top layer. And if
+something needs to update an existing file in a lower layer, then the
+file gets copied to the upper layer and changes go into the copy. The
+version of the file on the lower layer cannot be seen by the
+applications anymore, but it is there, unchanged.
+.SS Union File System
+.sp
+We call the union of the read\-write layer and all the read\-only layers
+a \fBunion file system\fP.
+.SS Image
+[image]
+.sp
+In Docker terminology, a read\-only \fIlayer_def\fP is called an
+\fBimage\fP. An image never changes.
+.sp
+Since Docker uses a \fIufs_def\fP, the processes think the whole file
+system is mounted read\-write. But all the changes go to the top\-most
+writeable layer, and underneath, the original file in the read\-only
+image is unchanged. Since images don\(aqt change, images do not have state.
+[image]
+.SS Parent Image
+[image]
+.sp
+Each image may depend on one more image which forms the layer beneath
+it. We sometimes say that the lower image is the \fBparent\fP of the
+upper image.
+.SS Base Image
+.sp
+An image that has no parent is a \fBbase image\fP.
+.SS Container
+[image]
+.sp
+Once you start a process in Docker from an \fIimage_def\fP, Docker
+fetches the image and its \fIparent_image_def\fP, and repeats the
+process until it reaches the \fIbase_image_def\fP. Then the
+\fIufs_def\fP adds a read\-write layer on top. That read\-write layer,
+plus the information about its \fIparent_image_def\fP and some
+additional information like its unique id, networking configuration,
+and resource limits is called a \fBcontainer\fP.
+.SS Container State
+.sp
+Containers can change, and so they have state. A container may be
+\fBrunning\fP or \fBexited\fP.
+.sp
+When a container is running, the idea of a "container" also includes a
+tree of processes running on the CPU, isolated from the other
+processes running on the host.
+.sp
+When the container is exited, the state of the file system and
+its exit value is preserved. You can start, stop, and restart a
+container. The processes restart from scratch (their memory state is
+\fBnot\fP preserved in a container), but the file system is just as it
+was when the container was stopped.
+.sp
+You can promote a container to an \fIimage_def\fP with \fBdocker
+commit\fP. Once a container is an image, you can use it as a parent for
+new containers.
+.SH FAQ
+.SS Most frequently asked questions.
+.INDENT 0.0
+.IP 1. 3
+\fBHow much does Docker cost?\fP
+.sp
+Docker is 100% free, it is open source, so you can use it without paying.
+.IP 2. 3
+\fBWhat open source license are you using?\fP
+.sp
+We are using the Apache License Version 2.0, see it here: \fI\%https://github.com/dotcloud/docker/blob/master/LICENSE\fP
+.IP 3. 3
+\fBDoes Docker run on Mac OS X or Windows?\fP
+.sp
+Not at this time, Docker currently only runs on Linux, but you can use VirtualBox to run Docker in a
+virtual machine on your box, and get the best of both worlds. Check out the \fIinstall_using_vagrant\fP and \fIwindows\fP installation guides.
+.IP 4. 3
+\fBHow do containers compare to virtual machines?\fP
+.sp
+They are complementary. VMs are best used to allocate chunks of hardware resources. Containers operate at the process level, which makes them very lightweight and perfect as a unit of software delivery.
+.IP 5. 3
+\fBCan I help by adding some questions and answers?\fP
+.sp
+Definitely! You can fork \fI\%the repo\fP and edit the documentation sources.
+.UNINDENT
+.INDENT 0.0
+.IP 42. 4
+\fBWhere can I find more answers?\fP
+.sp
+You can find more answers on:
+.INDENT 4.0
+.IP \(bu 2
+\fI\%Docker club mailinglist\fP
+.IP \(bu 2
+\fI\%IRC, docker on freenode\fP
 .IP \(bu 2
 \fI\%Github\fP
 .IP \(bu 2
 \fI\%Ask questions on Stackoverflow\fP
 .IP \(bu 2
 \fI\%Join the conversation on Twitter\fP
+.UNINDENT
 .UNINDENT
 .sp
 Looking for something else to read? Checkout the \fIhello_world\fP example.
@@ -1145,5 +7127,4 @@ Team Docker
 .SH COPYRIGHT
 2013, Team Docker
 .\" Generated by docutils manpage writer.
-.\" 
 .
