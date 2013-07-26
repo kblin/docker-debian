@@ -1,0 +1,3 @@
+version=3
+opts=filenamemangle=s/.+\/v(\d\S*)\.tar\.gz/lxc-docker_$1.orig.tar.gz/ \
+  https://github.com/dotcloud/docker/tags .*/v(\d\S*)\.tar\.gz
