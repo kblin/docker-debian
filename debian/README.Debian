@@ -4,7 +4,10 @@ Docker on Debian
 Docker has been built and tested on Sid. All docker functionality works
 out of the box, except for memory limitation as the stock debian kernel
 disables it by default. To enable docker memory limitation, the kernel needs
-to be loaded with boot parameters: cgroup_enable=memory swapaccount=1
+to be loaded with boot parameters: cgroup_enable=memory swapaccount=1. You can
+do so by editing /etc/default/grub and extending GRUB_CMDLINE_LINUX like:
+GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1", then running
+update-grub, and reboot.
 
 
 Building docker package
@@ -14,15 +17,14 @@ Assuming you have a sid system up and running
 
 # Get building dependencies
 sudo apt-get update
-sudo apt-get install -y debhelper build-essential autotools-dev golang-go
+sudo apt-get install git-buildpackage golang-go golang-pty-dev golang-mux-dev golang-context-dev
 
 # Make the debian package
-git clone https://github.com/dotcloud/docker.git
-cd docker/packaging/debian
-make debian
+git clone git://anonscm.debian.org/collab-maint/lxc-docker
+(cd lxc-docker; git-buildpackage --git-arch=all --git-pristine-tar-commit)
 
 
 Install docker package
 ~~~~~~~~~~~~~~~~~~~~~~
 
-sudo dpkg -i lxc-docker_*-1_amd64.deb; sudo apt-get install -f -y
+sudo dpkg -i lxc-docker_*_amd64.deb; sudo apt-get install -f -y
