@@ -8,6 +8,10 @@ export DH_VERBOSE=1
 # compiled.
 TMPGOPATH = $(CURDIR)/debian/tmp/usr/share/gocode
 
+# Debian helper variables
+export DH_OPTIONS
+export DH_GOPKG := github.com/Debian/lxc-docker
+
 # Docker temporary building path
 DOCKER_PATH = ${TMPGOPATH}/src/github.com/dotcloud/docker
 
@@ -36,4 +40,4 @@ override_dh_installchangelogs:
 	dh_installchangelogs CHANGELOG.md
 
 %:
-	dh $@
+	dh $@ --buildsystem=golang --with=golang
