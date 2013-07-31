@@ -2,7 +2,7 @@ Source: lxc-docker
 Section: admin
 Priority: optional
 Maintainer: Daniel Mizyrycki <daniel@dotcloud.com>
-Build-Depends: debhelper (>=9), golang-go, golang-pty-dev, golang-mux-dev, golang-context-dev
+Build-Depends: debhelper (>=9), git, golang-go, golang-pty-dev, golang-mux-dev, golang-context-dev
 Standards-Version: 3.9.4
 Homepage: http://github.com/dotcloud/docker
 Vcs-Git: git://anonscm.debian.org/collab-maint/lxc-docker.git
