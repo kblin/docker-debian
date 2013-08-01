@@ -1,0 +1,9 @@
+[Unit]
+Description=Linux container runtime daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/lxc-docker -d
+
+[Install]
+WantedBy=multi-user.target
