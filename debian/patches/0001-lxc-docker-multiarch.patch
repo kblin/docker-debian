@@ -1,0 +1,21 @@
+From: Daniel Mizyrycki <daniel@dotcloud.com>
+Date: Thu, 1 Aug 2013 14:25:42 -0700
+Subject: lxc docker multiarch
+
+---
+ server.go |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server.go b/server.go
+index 954bbb2..34caf6d 100644
+--- a/server.go
++++ b/server.go
+@@ -1129,7 +1129,7 @@ func (srv *Server) ImageInspect(name string) (*Image, error) {
+ 
+ func NewServer(flGraphPath string, autoRestart, enableCors bool, dns ListOpts) (*Server, error) {
+ 	if runtime.GOARCH != "amd64" {
+-		log.Fatalf("The docker runtime currently only supports amd64 (not %s). This will change in the future. Aborting.", runtime.GOARCH)
++		log.Printf("WARNING: The docker runtime has only experimental support for your %s architecture. DO NOT use it in production.", runtime.GOARCH)
+ 	}
+ 	runtime, err := NewRuntime(flGraphPath, autoRestart, dns)
+ 	if err != nil {
