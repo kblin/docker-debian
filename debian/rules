@@ -2,14 +2,16 @@
 # -*- makefile -*-
 
 # Uncomment this to turn on verbose mode.
-export DH_VERBOSE=1
+# export DH_VERBOSE=1
 
-# Temporary working directory to which the source will be copied, then
-# compiled.
+# Temporary directory where the source is copied and compiled
 TMPGOPATH = $(CURDIR)/debian/tmp/usr/share/gocode
 
+# Tell dh-golang where this package lives upstream
+export DH_GOPKG := github.com/dotcloud/docker
+
 # Docker temporary building path
-DOCKER_PATH = ${TMPGOPATH}/src/github.com/dotcloud/docker
+DOCKER_PATH = ${TMPGOPATH}/src/${DH_GOPKG}
 
 DOCKER_VERSION = $(shell git tag | sort -nr | sed -E -n 's/upstream\/(.+)/\1/p')
 GIT_COMMIT = $(shell git rev-list upstream/${DOCKER_VERSION} | sed -E -n 's/^(.{12}).+/\1/p;q')
@@ -36,4 +38,4 @@ override_dh_installchangelogs:
 	dh_installchangelogs CHANGELOG.md
 
 %:
-	dh $@
+	dh $@ --buildsystem=golang --with=golang
