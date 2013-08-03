@@ -15,7 +15,7 @@ DOCKER_PATH = ${TMPGOPATH}/src/${DH_GOPKG}
 
 DOCKER_VERSION = $(shell git tag | sort -nr | sed -E -n 's/upstream\/(.+)/\1/p')
 GIT_COMMIT = $(shell git rev-list upstream/${DOCKER_VERSION} | sed -E -n 's/^(.{12}).+/\1/p;q')
-BUILD_OPTIONS = -a -ldflags "-X main.GITCOMMIT $(GIT_COMMIT) -d -w"
+BUILD_OPTIONS = -a -ldflags "-X main.GITCOMMIT $(GIT_COMMIT)+changes -d -w"
 
 override_dh_auto_install:
 	# Create temporary docker go build tree with dependencies

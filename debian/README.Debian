@@ -11,3 +11,5 @@ To instruct the kernel to enable memory cgroup support, edit
 /etc/default/grub and extend GRUB_CMDLINE_LINUX_DEFAULT like:
 GRUB_CMDLINE_LINUX_DEFAULT="cgroup_enable=memory swapaccount=1", then
 run update-grub, and reboot.
+This debian package includes experimental support for architectures
+different from amd64.
